@@ -88,6 +88,7 @@ sys.getsizeof(data) # 96
   - Allocate new array `b` with larger capacity.
   - `b[i] = a[i]` and `a = b`.
   - Assign new element to `b` after last cell counter of `a`.
+  - Free the old array `a`, typically handled by the garbage collector.
 - Exercise: [`Dynamic Array Exercise.ipynb`](./Array%20Sequences/Dynamic%20Array%20Exercise.ipynb)
 
 
