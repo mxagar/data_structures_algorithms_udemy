@@ -1,9 +1,10 @@
-# Python for Algorithms, Data-Structures, and Interviews!
-#### Welcome to the repository for the Udemy Course: Python for Algorithms, Data Structures, and Interviews!
+# Python for Algorithms, Data-Structures, and Interviews
 
-This is the ultimate course in preparing you for your technical interviews and landing the job of your dreams!
+This repository contains a compilation of algorithm & data structure implementations in python. I forked it originally from a repository by J.M. Portilla, who has a Udemy course on the topic:
 
-Get the entire course, including full video content, solution walkthroughs, discussion forums, instructor support, 
-and much more for only $20 by using the [discount link](https://www.udemy.com/python-for-data-structures-algorithms-and-interviews/?couponCode=github_discount)!
+[Python for Algorithms, Data-Structures, and Interviews](https://www.udemy.com/course/python-for-data-structures-algorithms-and-interviews)
 
+I added comments and alternative implementations in some cases.
 
+Mikel Sagardia, 2022.  
+No guarantees.
