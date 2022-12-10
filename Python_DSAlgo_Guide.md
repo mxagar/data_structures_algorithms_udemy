@@ -125,6 +125,8 @@ The exercises with solutions and comments are located in [`Array Sequences`](./A
 
 ## 3. Stacks, Queues and Deques
 
+- Stacks: 
+
 ## 4. Linked Lists
 
 ## 5. Recursion
