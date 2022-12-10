@@ -22,7 +22,13 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
     - [Dynamic Arrays](#dynamic-arrays)
     - [Exercises](#exercises)
   - [3. Stacks, Queues and Deques](#3-stacks-queues-and-deques)
+    - [Stacks](#stacks)
+    - [Queues](#queues)
+    - [Deques](#deques)
+    - [Exercises](#exercises-1)
   - [4. Linked Lists](#4-linked-lists)
+    - [Singly Linked Lists](#singly-linked-lists)
+    - [Doubly Linked Lists](#doubly-linked-lists)
   - [5. Recursion](#5-recursion)
   - [6. Trees](#6-trees)
   - [7. Searching and Sorting](#7-searching-and-sorting)
@@ -125,9 +131,127 @@ The exercises with solutions and comments are located in [`Array Sequences`](./A
 
 ## 3. Stacks, Queues and Deques
 
-- Stacks: 
+Stacks, Queues and Deques: linear, ordered data structures.
+
+### Stacks
+
+- Stack: LIFO = Last in, first out; pile of books: we take the last that was added.
+  - `push()`: to the top.
+  - `pop()`: from the top.
+  - Both operations are performed at the top!
+- **Pushing and then popping items from a stack reverses the order!**
+- A list behaves like a stack, where:
+  - `pop()` is the `pop()` function itself
+  - and `append(item)` or `extend(item)` are the `push(item)` function.
+- [`Implementation of Stack.ipynb`](./Stacks%2C%20Queues%20and%20Deques/Implementation%20of%20Stack.ipynb)
+
+```python
+class Stack:
+    def __init__(self):
+        self.items = []
+
+    def isEmpty(self):
+        return self.items == []
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        return self.items.pop()
+
+    def peek(self):
+        return self.items[len(self.items)-1]
+
+    def size(self):
+        return len(self.items)
+```
+
+### Queues
+
+- Queues: FIFO: First in, first out: a waiting queue of people: the first that arrived is served first, and the next, next; first come, fist served.
+  - `push()`: to the front; aka. `enqueue()`.
+  - `pop()`: from the rear/back; aka. `dequeue()`.
+  - The operations are performed at different ends of the collection!
+- In contrast to stacks, queues don't reverse the order; we can achieve a queue behavior by using two stacks.
+- A list can behave like a queue, with these functions:
+  - `pop()` is `pop()` or `dequeue()`.
+  - `insert(0,item)` is `push(item)` or `enqueue(item)`. 
+- [`Implementation of Queue.ipynb`](./Stacks%2C%20Queues%20and%20Deques/Implementation%20of%20Queue.ipynb)
+
+```python
+class Queue:
+    def __init__(self):
+        self.items = []
+
+    def isEmpty(self):
+        return self.items == []
+
+    def enqueue(self, item):
+        self.items.insert(0,item)
+
+    def dequeue(self):
+        return self.items.pop()
+
+    def size(self):
+        return len(self.items)
+```
+
+:warning: Note that we add to the front, not to the rear!
+
+### Deques
+
+- Deque: double ended queue: we and add/remove items either to the front/rear of the data structure.
+- Deques integrate the functionalities of stacks and queues; but we need to use them properly. **We need to picture what's going on as we use the basic operations and know where we're addding/subtracting items, i.e. at the rear or the front.**
+- Lists can behave like deques by using these functions:
+  - `addFront()`: `append(item)`
+  - `addRear()`: `insert(0,item)`
+  - `removeFront()`: `pop()`
+  - `removeRear()`: `pop(0)`
+
+```python
+class Deque:
+    def __init__(self):
+        self.items = []
+
+    def isEmpty(self):
+        return self.items == []
+
+    def addFront(self, item):
+        self.items.append(item)
+
+    def addRear(self, item):
+        self.items.insert(0,item)
+
+    def removeFront(self):
+        return self.items.pop()
+
+    def removeRear(self):
+        return self.items.pop(0)
+
+    def size(self):
+        return len(self.items)
+```
+
+### Exercises
+
+- [`Balanced Parentheses Check - SOLUTION.ipynb`](./Stacks%2C%20Queues%20and%20Deques/Stacks%2C%20Queues%2C%20Deques%20Interview%20Questions%20-SOLUTIONS/Balanced%20Parentheses%20Check%20-%20SOLUTION.ipynb)
+  - Problem: Given a set of parenthesis, determine if it's balanced or not.
+  - Solution: a stack is used to collect all opening parenthesis in the string; when we find a closing, we pop the last opening in the stack and check if it matches with the closing.
+  - **This question is popular in interviews**.
+- [`Implement a Queue -Using Two Stacks - SOLUTION.ipynb`](./Stacks%2C%20Queues%20and%20Deques/Stacks%2C%20Queues%2C%20Deques%20Interview%20Questions%20-SOLUTIONS/Implement%20a%20Queue%20-Using%20Two%20Stacks%20-%20SOLUTION.ipynb)
+  - Problem: Given a stack class, implement a queue class using two stacks.
+  - Solution: One stack reverses the order, but two stacks bring it back to the original order; a queue maintains the order, precisely.
+  - **This question is popular in interviews**.
 
 ## 4. Linked Lists
+
+### Singly Linked Lists
+
+
+
+### Doubly Linked Lists
+
+
 
 ## 5. Recursion
 
