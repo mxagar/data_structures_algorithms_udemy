@@ -6,5 +6,9 @@ This repository contains a compilation of algorithm & data structure implementat
 
 I added comments and alternative implementations in some cases.
 
+:warning: This repository is some kind of sandbox where I try things, so if ddon't expect things to be tidy and 100% PEP8-compliant :stuck_out_tongue_winking_eye:.
+
+A non-exasutive *guide* with notes can be found in [`Python_DSAlgo_Guide.md`](Python_DSAlgo_Guide.md).
+
 Mikel Sagardia, 2022.  
 No guarantees.
