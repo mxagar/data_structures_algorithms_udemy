@@ -369,11 +369,74 @@ More examples in [`Recursion Homework Example Problems - SOLUTIONS.ipynb`](./Rec
 
 ### Memoization
 
+[Memoization](https://en.wikipedia.org/wiki/Memoization) consists in caching/storing often *expensive* solutions to a problem and re-using them later. If we apply memoization to recursion, we're doing **dynamic programming**.
 
+Example of factorial function with memoization:
+
+```python
+
+def factorial(k):
+    if k < 2: 
+        return 1
+    else: 
+        return k * factorial(k-1)
+
+# Function memoization
+# Create cache for known results
+# Note: we can also perform function memoization
+# by defining inside the original function:
+# - the dictionary
+# - and a helper recursive function
+# See Recursion Problem 4: Change-making problem
+factorial_memo = {}
+
+def factorial_1(k):
+    if k < 2: 
+        return 1
+    if not k in factorial_memo:
+        factorial_memo[k] = k * factorial(k-1)
+    return factorial_memo[k]
+
+# Class memoization
+class Memoize:
+    def __init__(self, f):
+        self.f = f
+        self.memo = {}
+    def __call__(self, *args):
+        if not args in self.memo:
+            self.memo[args] = self.f(*args)
+        return self.memo[args]
+
+# 2.19 ms
+%%timeit
+factorial(20)
+
+# 117 ns
+%%timeit
+factorial_1(20)
+
+# 187 ns
+%%timeit
+factorial_2(20)
+```
 
 ### Exercises
 
-
+- [`Recursion Problem 1 - Reverse String - SOLUTION.ipynb`](./Recursion/Recursion%20Problems%20-%20%20SOLUTIONS/Recursion%20Problem%201%20-%20Reverse%20String%20-%20SOLUTION.ipynb)
+  - Problem: Reverse a string with recursion.
+  - Solution: Take last character and reverse rest recursively. Or, better, the other way around: take first character, call `reverse()` and return result with first character appended.
+- [`Recursion Problem 2 - String Permutation- SOLUTION.ipynb`](./Recursion/Recursion%20Problems%20-%20%20SOLUTIONS/Recursion%20Problem%202%20-%20String%20Permutation-%20SOLUTION.ipynb)
+  - Problem: Given a string, write a function that uses recursion to output a list of all the possible permutations of that string.
+  - Solution: We traverse all letters in the string and permute the rest. The base case is one letter. Each permutation call returns the current letter and the permutation result concatenated. Note that a permutation is a factorial itself.
+- [`Recursion Problem 3 - Fibonacci Sequence - SOLUTION.ipynb`](./Recursion/Recursion%20Problems%20-%20%20SOLUTIONS/Recursion%20Problem%203%20-%20Fibonacci%20Sequence%20-%20SOLUTION.ipynb)
+  - Problem: Compute the Fibonacci sequence with recursion, dynamically (recursion + memoization) and iteratively.
+  - Solution: Recursion is straightforward. The others are engineering:
+    - Dynamic version: Memoization class is used directly.
+    - Iterative version: Tuple unpacking can be used.
+- [`Recursion Problem 4 - Coin Change - SOLUTION.ipynb`](./Recursion/Recursion%20Problems%20-%20%20SOLUTIONS/Recursion%20Problem%204%20-%20Coin%20Change%20-%20SOLUTION.ipynb)
+  - Problem: Given a target amount n and a list (array) of distinct coin values, what's the fewest coins needed to make the change amount.
+  - Solution: Have a look at the notebook. Basically, a dictionary is built to store previous values. Then, we build the base case and 
+  - Very popular problem: [Change-making problem](https://en.wikipedia.org/wiki/Change-making_problem).
 
 
 ## 6. Trees
@@ -387,6 +450,16 @@ More examples in [`Recursion Homework Example Problems - SOLUTIONS.ipynb`](./Rec
 ## 10. Python Tips & Tricks
 
 ```python
+###
+# General
+###
+
+# Time execution time with several loops
+%%timeit
+foo()
+
+# Maximum possible value
+float("inf")
 
 ###
 # Arrays / Lists, Strings, Dictionaries, Sets & Co.
@@ -408,13 +481,17 @@ a.sort() # in place
 d = {}
 d['key'] = 'value'
 for k in d.keys():
-  pass
+    pass
+
+# List/Dictionary comprehensions & enumerate
+[v for v in range(10) if v%2 == 0] # [0, 2, 4, 6, 8]
+{k:v for k,v in enumerate(range(0,10,2))} # {0: 0, 1: 2, 2: 4, 3: 6, 4: 8}
 
 # Sets: nice way of reducing time complexity!
 s = set()
 s.add(obj) # can be an int, tuple, etc.
 if e in s:
-  print(f"{e} is in set s")
+    print(f"{e} is in set s")
 
 # Sums, Max, Min
 a = [1,2,3]
@@ -429,6 +506,20 @@ for p in zip(arr1,arr2):
     print(p) # (1, 4), (2, 5), (3, 6)
     # unpacking
     a, b = p
+
+# Tuple unpacking
+a, b = my_tuple
+# Note there is an order!
+# First right side is evaluated
+# then left side is assigned the right side
+a, b = b, a + b
+# Equivalent to
+a_new = b
+b_new = a + b
+a = a_new
+b = b_new
+# Variable swap, without temp
+x, y = y, x
 
 # Collections: Counter, OrderedDict, defaultdict, namedtuple(), ...
 # https://docs.python.org/3/library/collections.html
