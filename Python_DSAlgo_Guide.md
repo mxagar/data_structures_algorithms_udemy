@@ -35,6 +35,8 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
     - [Memoization and Dynamic Programming](#memoization-and-dynamic-programming)
     - [Exercises](#exercises-3)
   - [6. Trees](#6-trees)
+    - [Basics and Implementation](#basics-and-implementation)
+    - [Traversals](#traversals)
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
   - [9. Riddles](#9-riddles)
@@ -464,6 +466,153 @@ factorial_2(20)
   - Very popular problem: [Change-making problem](https://en.wikipedia.org/wiki/Change-making_problem).
 
 ## 6. Trees
+
+### Basics and Implementation
+
+Some properties of trees:
+
+- Trees have:
+  - Root, branches & leaves.
+  - Parent and children nodes; each child belongs to a parent.
+- Each leaf node is unique.
+- Edges are connections between parent-children nodes.
+- The root node is the only node with no incomming edges.
+- Leaf node have no children.
+- We can create paths in trees when we traverse the nodes.
+- There is a unique path from the root to a node.
+- If each node has a maximum number of 2 children, we have a **binary tree**.
+- **Level** of a node: number of edges on the path from the root to the node.
+- **Height** of the tree: maximum level of an node in the tree.
+- Trees can be defined recursively: a tree is a tree if it contains a root and optionally other subtrees. That definition is relevant, because it opens the door to recursive implementations.
+
+The simplest way (non-optimal) of implementing trees in python is using **lists of lists**:
+
+- The first item is the root node, which contains its children nodes
+- The second element is one subtree, i.e., a children *tree* of the root, which also contains its children nodes or *sub-trees*
+- And so on...
+
+```python
+def BinaryTree(r):
+    return [r, [], []]
+
+def insertLeft(root,newBranch):
+    # We extract the lement in position 1: left child
+    t = root.pop(1)
+    # If the left child is not empty,
+    # insert it to the left of the new branch
+    # else, insert a new barnch to the empty left child of root
+    if len(t) > 1:
+        root.insert(1,[newBranch,t,[]])
+    else:
+        root.insert(1,[newBranch, [], []])
+    return root
+
+# Same as insertLeft, but with position 2 == right side
+def insertRight(root,newBranch):
+    t = root.pop(2)
+    if len(t) > 1:
+        # Insert existing prior child to the right == position 2
+        root.insert(2,[newBranch,[],t])
+    else:
+        root.insert(2,[newBranch,[],[]])
+    return root
+
+def getRootVal(root):
+    return root[0]
+
+def setRootVal(root,newVal):
+    root[0] = newVal
+
+def getLeftChild(root):
+    return root[1]
+
+def getRightChild(root):
+    return root[2]
+
+###
+
+r = BinaryTree(3) #  [3, [], []]
+insertLeft(r,4) # [3, [4, [], []], []]
+insertLeft(r,5) # [3, [5, [4, [], []], []], []]
+insertRight(r,6) # [3, [5, [4, [], []], []], [6, [], []]]
+insertRight(r,7) # [3, [5, [4, [], []], []], [7, [], [6, [], []]]]
+l = getLeftChild(r)
+print(l) # [5, [4, [], []], []]
+setRootVal(l,9)
+print(r) # [3, [9, [4, [], []], []], [7, [], [6, [], []]]]
+```
+
+Another (more sophisticated) way of implementing a tree in python is using **Object-Oriented Programming (OOP) with nodes and references**:
+
+```python
+class BinaryTree(object):
+    def __init__(self,rootObj):
+        self.key = rootObj
+        self.leftChild = None
+        self.rightChild = None
+
+    def insertLeft(self,newNode):
+        # If we have no left child, create new and add newNode
+        # to root; else, create new node, add to its left the current
+        # left child and assign to the left child the newly create node
+        # This approach is the same as with lists, but using classes,
+        # nodes and references, instead
+        if self.leftChild == None:
+            self.leftChild = BinaryTree(newNode)
+        else:
+            t = BinaryTree(newNode)
+            t.leftChild = self.leftChild
+            self.leftChild = t
+
+    # Same as insertLeft but for the right side
+    def insertRight(self,newNode):
+        if self.rightChild == None:
+            self.rightChild = BinaryTree(newNode)
+        else:
+            t = BinaryTree(newNode)
+            t.rightChild = self.rightChild
+            self.rightChild = t
+
+    def getRightChild(self):
+        return self.rightChild
+
+    def getLeftChild(self):
+        return self.leftChild
+
+    def setRootVal(self,obj):
+        self.key = obj
+
+    def getRootVal(self):
+        return self.key
+
+###
+
+r = BinaryTree('a')
+print(r.getRootVal()) # a
+print(r.getLeftChild()) # None
+r.insertLeft('b')
+print(r.getLeftChild()) # <__main__.BinaryTree object at 0x7faa19fce750>
+print(r.getLeftChild().getRootVal()) # b
+r.insertRight('c')
+print(r.getRightChild()) # <__main__.BinaryTree object at 0x7fa9f06f2050>
+print(r.getRightChild().getRootVal()) # c
+r.getRightChild().setRootVal('hello')
+print(r.getRightChild().getRootVal()) # hello
+
+```
+
+### Traversals
+
+There are 3 basic tree traversal operations:
+
+- Preorder
+  1. Visit **root** node first
+  2. Then, a recusive preorder traversal of **left** sub-tree.
+  3. Finally recursive preorder traversal of the **right** sub-tree.
+- Inorder
+- Postorder
+
+
 
 ## 7. Searching and Sorting
 
