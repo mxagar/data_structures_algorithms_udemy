@@ -29,6 +29,7 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [4. Linked Lists](#4-linked-lists)
     - [Singly Linked Lists](#singly-linked-lists)
     - [Doubly Linked Lists](#doubly-linked-lists)
+    - [Exercises](#exercises-2)
   - [5. Recursion](#5-recursion)
   - [6. Trees](#6-trees)
   - [7. Searching and Sorting](#7-searching-and-sorting)
@@ -247,11 +248,86 @@ class Deque:
 
 ### Singly Linked Lists
 
+- Sequence of nodes, each containing 2 things:
+  - A value or reference to an object.
+  - Reference/pointer to the next node.
+- We additionally have 2 special nodes:
+  - `head`: reference to the first node in the list.
+  - `tail`: reference to the last node, which points to `None`.
+- We can add/remove values anywhere:
+  - We need to locate the node by traversing the list: we already know where the `head` and `tail` are.
+  - We create new node.
+  - We update the references of the new node and the one before it.
+- Access to the element `k` is `O(k)` bevcause we need to traverse the list from the tail, but insertion/deletion once we found it is `O(1)`.
+- IMPORTANT: we only have the reference to the next node, not the previous! That makes necessary traversals in some cases. A doubly linked list solves that by keeping two references per node: the one to the next and the one to the previous.
 
+Example of singly linked list which contains airport codes/names:
+
+![Singly Linked List](./assets/singly_linked_list.png)
+
+Inserting/removing a node in the `head` is `O(1)`; removing at the `tail` is `O(n)`, because we need to traverse until the predecessor of the `tail`!
+
+![Singly Linked List: Insertion at Head](./assets/singly_linked_list_insert_head.png)
+
+Implementation:
+
+```python
+class Node:
+    def __init__(self,value):
+        self.value = value
+        self.nextnode = None # tail, default
+
+a = Node(1)
+b = Node(2)
+c = Node(3)
+
+a.nextnode = b
+b.nextnode = c
+```
 
 ### Doubly Linked Lists
 
+- A doubly linked list is like a singly linked list, but each node has two references instead of one; so altogether, we have:
+  - The value or a reference to an object.
+  - A reference to the previous node.
+  - A reference to the next node.
+- As with singly lists, we have:
+  - A `head`, aka. `header`
+  - A `tail`, aka. `trailer`
+  - Both are also called *sentinels*.
+- Thus, we have `O(1)` insertion/deletion at `head`/`tail`.
+- Access to the element `k` is still `O(k)` (we can traverse the list from the head or the tail), but insertion/deletion once we found it is `O(1)`.
 
+Example of how insertion works in a doubly linked list:
+
+![Doubly Linked List: Insertion](./assets/doubly_linked_list_insertion.png)
+
+Implementation:
+
+```python
+class DoublyLinkedListNode(object):
+    def __init__(self,value):
+        self.value = value
+        self.next_node = None
+        self.prev_node = None
+
+a = DoublyLinkedListNode(1)
+b = DoublyLinkedListNode(2)
+c = DoublyLinkedListNode(3)
+
+# Setting b after a
+b.prev_node = a
+a.next_node = b
+
+# Setting c after a
+b.next_node = c
+c.prev_node = b
+```
+
+### Exercises
+
+- [`Singly Linked List Cycle Check - SOLUTION.ipynb`](./Linked%20Lists/Linked%20Lists%20Interview%20Problems/Singly%20Linked%20List%20Cycle%20Check%20-%20SOLUTION.ipynb)
+- 
 
 ## 5. Recursion
 
