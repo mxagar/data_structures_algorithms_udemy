@@ -32,7 +32,7 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
     - [Exercises](#exercises-2)
   - [5. Recursion](#5-recursion)
     - [Recursion Basics](#recursion-basics)
-    - [Memoization](#memoization)
+    - [Memoization and Dynamic Programming](#memoization-and-dynamic-programming)
     - [Exercises](#exercises-3)
   - [6. Trees](#6-trees)
   - [7. Searching and Sorting](#7-searching-and-sorting)
@@ -367,9 +367,9 @@ More examples in [`Recursion Homework Example Problems - SOLUTIONS.ipynb`](./Rec
 - Given an integer, create a function which returns the sum of all the individual digits in that integer.
 - Split a stream of strings in words defined in a dictionary, if possible.
 
-### Memoization
+### Memoization and Dynamic Programming
 
-[Memoization](https://en.wikipedia.org/wiki/Memoization) consists in caching/storing often *expensive* solutions to a problem and re-using them later. If we apply memoization to recursion, we're doing **dynamic programming**.
+[Memoization](https://en.wikipedia.org/wiki/Memoization) consists in caching/storing often *expensive* solutions to a problem and re-using them later. If we apply memoization to recursion, we're doing **dynamic programming**. Memoization & dynamic programming are very important because solutions to seemingly simple problems can explode in complexity; for instance, have a look at the 
 
 Example of factorial function with memoization:
 
@@ -383,19 +383,39 @@ def factorial(k):
 
 # Function memoization
 # Create cache for known results
-# Note: we can also perform function memoization
-# by defining inside the original function:
-# - the dictionary
-# - and a helper recursive function
-# See Recursion Problem 4: Change-making problem
+
 factorial_memo = {}
 
 def factorial_1(k):
     if k < 2: 
         return 1
+    # Memoization consists in checking if we have computed the value
+    # already; if so, we return it, if not, we compute it with
+    # recursion as store it!
     if not k in factorial_memo:
         factorial_memo[k] = k * factorial(k-1)
     return factorial_memo[k]
+
+# Note: we can also perform function memoization
+# by defining inside the original function:
+# - the dictionary
+# - and a helper recursive function
+# See Recursion Problem 4: Change-making problem
+def factorial_1(k):
+
+    def factorial_recursive(k):
+        if k < 2: 
+            return 1
+        # Memoization consists in checking if we have computed the value
+        # already; if so, we return it, if not, we compute it with
+        # recursion as store it!
+        if not k in factorial_memo:
+            factorial_memo[k] = k * factorial(k-1)
+        return factorial_memo[k]
+  
+    factorial_memo = {}
+
+    return factorial_recursive(k)
 
 # Class memoization
 class Memoize:
@@ -403,9 +423,14 @@ class Memoize:
         self.f = f
         self.memo = {}
     def __call__(self, *args):
+        # Memoization consists in checking if we have computed the value
+        # already; if so, we return it, if not, we compute it with
+        # recursion as store it!
         if not args in self.memo:
             self.memo[args] = self.f(*args)
         return self.memo[args]
+
+factorial_2 = Memoize(factorial)
 
 # 2.19 ms
 %%timeit
@@ -435,9 +460,8 @@ factorial_2(20)
     - Iterative version: Tuple unpacking can be used.
 - [`Recursion Problem 4 - Coin Change - SOLUTION.ipynb`](./Recursion/Recursion%20Problems%20-%20%20SOLUTIONS/Recursion%20Problem%204%20-%20Coin%20Change%20-%20SOLUTION.ipynb)
   - Problem: Given a target amount n and a list (array) of distinct coin values, what's the fewest coins needed to make the change amount.
-  - Solution: Have a look at the notebook. Basically, a dictionary is built to store previous values. Then, we build the base case and 
+  - Solution: Have a look at the notebook. Basically, a dictionary is built to store previous values. Then, we build the base case and a recursion which stores previous values. The recursion considers all coins and the difference to the target of each coin. **This problem is very interesting; have a look at it!**
   - Very popular problem: [Change-making problem](https://en.wikipedia.org/wiki/Change-making_problem).
-
 
 ## 6. Trees
 
