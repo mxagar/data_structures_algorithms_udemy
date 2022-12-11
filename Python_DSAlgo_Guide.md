@@ -31,6 +31,9 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
     - [Doubly Linked Lists](#doubly-linked-lists)
     - [Exercises](#exercises-2)
   - [5. Recursion](#5-recursion)
+    - [Recursion Basics](#recursion-basics)
+    - [Memoization](#memoization)
+    - [Exercises](#exercises-3)
   - [6. Trees](#6-trees)
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
@@ -341,6 +344,38 @@ c.prev_node = b
 
 ## 5. Recursion
 
+### Recursion Basics
+
+- Recursion: when a function calls itself; it's a ways of avoiding loops.
+- We distinguish:
+  - The base case: when the recursion stops; when recursive cases don't work we use it.
+  - Recursive cases: when the function is called again.
+
+Example: Factorial of an integer:
+
+```python
+def factorial(n):
+  if n < 2: # base case, n = 0; in this case, also 1 and for checks negative numbers
+    return 1
+  else: # recursive cases
+    return n*factorial(n)
+```
+
+More examples in [`Recursion Homework Example Problems - SOLUTIONS.ipynb`](./Recursion/Recursion%20Homework%20Example%20Problems%20-%20SOLUTIONS.ipynb):
+
+- Write a recursive function which takes an integer and computes the cumulative sum of 0 to that integer.
+- Given an integer, create a function which returns the sum of all the individual digits in that integer.
+- Split a stream of strings in words defined in a dictionary, if possible.
+
+### Memoization
+
+
+
+### Exercises
+
+
+
+
 ## 6. Trees
 
 ## 7. Searching and Sorting
@@ -410,12 +445,18 @@ Counter('abracadabra').most_common(3)   # [('a', 5), ('b', 2), ('r', 2)]
 # defaultdict: if no key, it initializes it
 
 # String handling basics
+# Reverse a text
 s = "Hello world"
 s.split() # ["Hello", "world"]
 " ".join(s[::-1]) # "world Hello"
 # Remove spaces and lowercase letters
 s1 = s1.replace(' ','').lower()
 s2 = s2.replace(' ','').lower()
+# Prefixes & suffixes
+s.startswith('01_')
+s.endswith('exe')
+
+
 
 ```
 
