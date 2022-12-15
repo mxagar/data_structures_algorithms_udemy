@@ -17,6 +17,9 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
 - [Python for Algorithms, Data-Structures, and Interviews](#python-for-algorithms-data-structures-and-interviews)
   - [Overview of Contents](#overview-of-contents)
   - [1. Algorithm Analysis and Big O](#1-algorithm-analysis-and-big-o)
+    - [Complexity of Python Data Structures](#complexity-of-python-data-structures)
+    - [Some Summary Figures](#some-summary-figures)
+    - [Interesting Links](#interesting-links)
   - [2. Array Sequences](#2-array-sequences)
     - [Basics](#basics)
     - [Dynamic Arrays](#dynamic-arrays)
@@ -43,10 +46,73 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [10. Python Tips \& Tricks](#10-python-tips--tricks)
   - [11. Other Topics](#11-other-topics)
     - [Salary Negotiation](#salary-negotiation)
+    - [Job Search Platforms](#job-search-platforms)
+    - [Typical Behavioral Questions](#typical-behavioral-questions)
 
 ## 1. Algorithm Analysis and Big O
 
-- [Big-O Cheat Sheet](https://www.bigocheatsheet.com/)
+> Big-O notation describes how quickly runtime will grow relative to the input as the input get arbitrarily large.
+
+- We focus on the term with the largest degree for `n`.
+- Added or multiplied constants are dropped: `O(2n) -> O(n)`.
+
+Related topics to consider:
+
+- We distinguish between worst, average and best cases; each case can have a different `O()`. Example algorithm that finds a match in a list:
+  - Best case: `O(1)`, because the matched element is the first. **Try to always comment best cases**.
+  - Worst case: `O(n)`, because the matched element is the last.
+- Space complexity: related to memory allocation instead of time complexity.
+
+### Complexity of Python Data Structures
+
+Lists:
+
+```python
+# Slow
+def method1():
+    l = []
+    for n in range(10000):
+        l = l + [n]
+
+# Faster
+def method2():
+    l = []
+    for n in range(10000):
+        l.append(n)
+
+# Even faster
+def method3():
+    l = [n for n in range(10000)]
+
+# Fastest!
+def method4():
+    l = list(range(10000))
+```
+
+![Python List Operations](./assets/python_list_operations.jpg)
+
+Dictionaries = hash tables.
+
+```python
+d = {'k1':1, 'k2':2}
+d['k1'] # 1
+```
+
+![Python Dictionary Operations](./assets/python_dict_operations.jpg)
+
+### Some Summary Figures
+
+![Complexity Graph](./assets/complexity_graph.jpg)
+
+![Data Structure Operation Complexity](./assets/data_structure_operation_complexity.jpg)
+
+![Array Sorting Complexity](./assets/array_sorting.jpg)
+
+### Interesting Links
+
+- [Big O in Plain English](https://stackoverflow.com/questions/487258/what-is-a-plain-english-explanation-of-big-o-notation/487278#487278).
+- [Explanation of O log n](https://stackoverflow.com/questions/2307283/what-does-olog-n-mean-exactly).
+- [Big-O Cheat Sheet](https://www.bigocheatsheet.com/).
 
 ## 2. Array Sequences
 
@@ -730,5 +796,51 @@ s.endswith('exe')
 
 ### Salary Negotiation
 
-- [How to Negotiate Your Job Offer - Prof. Deepak Malhotra (Harvard Business School)](https://www.youtube.com/watch?v=km2Hd_xgo9Q)
+- Wait the topic to be raised.
+- Know your value and prove a range based off a minimum.
+- Check company salaries: [https://www.glassdoor.com](https://www.glassdoor.com).
+- It is often said the it's better to let the company to make the first move. Whatever.
+- Interesting lecture: [How to Negotiate Your Job Offer - Prof. Deepak Malhotra (Harvard Business School)](https://www.youtube.com/watch?v=km2Hd_xgo9Q)
 
+### Job Search Platforms
+
+Job postings:
+
+- [https://angel.co](https://angel.co)
+- [http://www.simplyhired.com](http://www.simplyhired.com)
+- [https://www.glassdoor.com](https://www.glassdoor.com)
+- [https://www.linkedin.com/](https://www.linkedin.com/)
+- [http://www.indeed.com/](http://www.indeed.com/)
+
+Matching:
+
+- [https://hired.com/](https://hired.com/)
+- [https://www.whitetruffle.com/](https://www.whitetruffle.com/)
+- [http://www.indeed.com](http://www.indeed.com)
+- [https://otta.com/](https://otta.com/)
+
+### Typical Behavioral Questions
+
+- Tell me about yourself
+  - Brief history + accomplishments
+- Why are you leaving your current position
+  - Be positive, show what we want
+  - Emphasize departure will be professional
+  - Ambition, goals, growing, responsibilities
+- Why do you want this position?
+  - Show passion.
+  - Confidence.
+- Where do you see yourself in 5 years?
+  - Show you have a plan.
+- What's you greatest weakness?
+  - Turn question around and show areas that need improvement.
+- What do you know about our company?
+  - Do your research beforehand.
+- What's the most difficult situation you had to face at a job?
+  - Focus on the solution to the situation.
+- What do you think makes a successful manager?
+  - Show your management style and philosophy.
+  - Teamwork, leading by example.
+- How many positions have you applied for?
+- If the company's culture is public, read and learn it.
+- Be able to talk about any items on the CV.
