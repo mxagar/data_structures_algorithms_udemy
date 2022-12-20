@@ -118,21 +118,27 @@ d['k1'] # 1
 
 ### Basics
 
-- Arrays = lists.
-- Arrays are collections of elements/objects that are stored in contiguous memory cells. `O(1)` access.
+- Arrays = in Python, Sequences, which can be
+  - Lists
+  - Tuples
+  - Strings
+- Arrays are collections of elements/objects that are stored in contiguous memory cells.
+  - All cells have the same size.
+  - `O(1)` access.
 - Referential arrays: slices; they are pointers to the original objects!
 - Mutable and immutable: can change or not; references are converted to new objects if we assign anew immutable to a referenced cell.
   - Mutable: lists, sets, dicts
   - Immutable: numbers, strings, tuples, frozen sets
 - `append()` vs `extend()`
   - `append()`: appends a specified object at the end of the list.
-  - `extend()`: extends the list by appending elements from the specified iterable.
+  - `extend()`: extends the list by appending elements from the specified iterable. But references are added if we're using immutables, not new objects.
 
 ```python
 # Slicing is referential: we have pointers to original objects
+# That is, we're not creating new objects
 temp = primes[3:6]
 # But, if we change something in temp, a new object is created for that cell
-# if the objects are immutable
+# if the objects are IMMUTABLE
 temp[2] = 15 # primes is unchanged is we assign an immutable
 # Shallow copy: references to original objects!
 backup = list(primes)
@@ -142,7 +148,7 @@ backup = deepcopy(primes)
 # All 4 cells reference the same object!
 counters = [0]*4 # [0,0,0,0]
 # But, if we add a value to one cell, a new object is created for that cell
-# if the objects are immutable
+# if the objects are IMMUTABLE
 counters[2] += 1 # [0,0,1,0]
 # Extend takes references to original objects
 prime.extend(extras)
@@ -151,25 +157,27 @@ prime.extend(extras)
 ### Dynamic Arrays
 
 - Dynamic arrays: we can add elements to the array.
-- Memory is allocated first and if we append new immutables, 50%-%100 of current allocation is added every n additions.
+  - When an array is initiated, it has more capacity than its size.
+- Memory is allocated first and if we append new immutables, 50%-%100 of current allocation is added every n additions. In theory, doubling the size when we run out of capacity leads to an amortized runtime of `O(1)*` for addition of elements to an array.
 
 ```python
 import sys
 
 data = []
+len(data) # 0
 
-# Size in bytes
+# Size in bytes: Capacity
 sys.getsizeof(data) # 64, even though it contains nothing
 data.append(1) # [1]
 sys.getsizeof(data) # 96
 ```
 
-- If we want to manually extend an array `a`:
+- If we want to **manually** extend an array `a`:
   - Allocate new array `b` with larger capacity.
   - `b[i] = a[i]` and `a = b`.
   - Assign new element to `b` after last cell counter of `a`.
   - Free the old array `a`, typically handled by the garbage collector.
-- Exercise: [`Dynamic Array Exercise.ipynb`](./Array%20Sequences/Dynamic%20Array%20Exercise.ipynb)
+- Exercise in which that manual allocation is implemented: [`Dynamic Array Exercise.ipynb`](./Array%20Sequences/Dynamic%20Array%20Exercise.ipynb)
 - Amortization: if we extend the capacity by doubling the current one, we achieve an amortized extension complexity of `O(1)*`.
 
 ### Exercises
@@ -194,7 +202,7 @@ The exercises with solutions and comments are located in [`Array Sequences`](./A
 - [`Sentence Reversal - SOLUTION.ipynb`](./Array%20Sequences/Array%20Sequence%20Interview%20Questions%20-%20SOLUTIONS/Sentence%20Reversal%20-%20SOLUTION.ipynb)
   - Problem: Given a string of words, reverse all the words.
   - Solution: Slice words, reverse list.
-- [`String Compression -SOLUTION.ipynb`](./Array%20Sequences/Array%20Sequence%20Interview%20Questions%20-%20SOLUTIONS/String%20Compression%20-SOLUTION.ipynb)
+- [`String Compression - SOLUTION.ipynb`](./Array%20Sequences/Array%20Sequence%20Interview%20Questions%20-%20SOLUTIONS/String%20Compression%20-SOLUTION.ipynb)
   - Problem: Compress strings as 'AAABCCc' to 'A3B1C2c1'.
   - Solution: Start checking current and next string, if the same update counter, else, update compressed representation string.
 - [`Unique Characters in String - SOLUTION.ipynb`](./Array%20Sequences/Array%20Sequence%20Interview%20Questions%20-%20SOLUTIONS/Unique%20Characters%20in%20String%20-%20SOLUTION.ipynb)
@@ -716,6 +724,12 @@ reversed(a)
 sorted(a)
 a.sort() # in place
 
+# More on Slicing
+l = [1, 2, 3, 4, 5]
+l1 = l[0:2] # [1, 2, 3]
+l2 = l[2:4] # [4, 5]
+l3 = l1 + l2 # [1, 2, 3, 4, 5]
+
 # Dictionaries
 d = {}
 d['key'] = 'value'
@@ -773,6 +787,9 @@ c['sausage'] = 0                        # counter entry with a zero count
 del c['sausage']                        # del actually removes the entry
 Counter('abracadabra').most_common(3)   # [('a', 5), ('b', 2), ('r', 2)]
 # defaultdict: if no key, it initializes it
+import collections
+d = collections.defaultdict(int)
+d[1] += 1 # even though d[1] was not created explicitly, it's initialized
 
 # String handling basics
 # Reverse a text
