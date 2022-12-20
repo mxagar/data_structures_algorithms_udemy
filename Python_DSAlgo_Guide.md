@@ -44,6 +44,8 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [8. Graph Algorithms](#8-graph-algorithms)
   - [9. Riddles](#9-riddles)
   - [10. Python Tips \& Tricks](#10-python-tips--tricks)
+    - [Python Tools](#python-tools)
+    - [Testing](#testing)
   - [11. Other Topics](#11-other-topics)
     - [Salary Negotiation](#salary-negotiation)
     - [Job Search Platforms](#job-search-platforms)
@@ -257,6 +259,10 @@ class Stack:
   - `pop()` is `pop()` or `dequeue()`.
   - `insert(0,item)` is `push(item)` or `enqueue(item)`. 
 - [`Implementation of Queue.ipynb`](./Stacks%2C%20Queues%20and%20Deques/Implementation%20of%20Queue.ipynb)
+- Note: I understand another implementation would be:
+  - `push()` = `append()`
+  - `pop()` = `pop(0)`
+  - That seems to me more logically easy to understand; however, note that the order of the elements in the sequence (list) is the inverse.
 
 ```python
 class Queue:
@@ -696,6 +702,8 @@ There are 3 basic tree traversal operations:
 
 ## 10. Python Tips & Tricks
 
+### Python Tools
+
 ```python
 ###
 # General
@@ -707,6 +715,12 @@ foo()
 
 # Maximum possible value
 float("inf")
+
+# is and is not check whether two variables refer to the same object in memory
+a = [1, 2, 3]
+b = a.copy()
+b != a # False: values compared
+b is not a # True: memory address compared
 
 ###
 # Arrays / Lists, Strings, Dictionaries, Sets & Co.
@@ -803,10 +817,31 @@ s2 = s2.replace(' ','').lower()
 s.startswith('01_')
 s.endswith('exe')
 
-
-
 ```
 
+### Testing
+
+```python
+
+# Function to be tested
+def square(n):
+    return n*n
+
+# Unit test class
+class UnitTest:
+    
+    def test(self, foo):
+        assert (foo(2) == 4)
+        assert (foo(-2) == 4)
+        assert (foo(0) == 0)
+        assert not (foo(3) == 10)
+        print('All test cases passed')
+        
+# Run Tests
+t = UnitTest()
+t.test(square)
+
+```
 
 
 ## 11. Other Topics
