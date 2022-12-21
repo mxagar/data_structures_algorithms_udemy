@@ -722,6 +722,13 @@ b = a.copy()
 b != a # False: values compared
 b is not a # True: memory address compared
 
+# Lambda functions
+def square(x):
+    return x**2
+# Lambda equivalent; use-once functions
+s = lambda x: x**2
+# See also map() and filter()
+
 ###
 # Arrays / Lists, Strings, Dictionaries, Sets & Co.
 ###
@@ -760,19 +767,27 @@ s.add(obj) # can be an int, tuple, etc.
 if e in s:
     print(f"{e} is in set s")
 
-# Sums, Max, Min
+# sum(), max(), min()
 a = [1,2,3]
 s = sum(a) # 6
 max_ = max(a) # 3
 min_ = max(a) # 1
 
-# Zip
+# zip()
 arr1 = [1, 2, 3]
 arr1 = [4, 5, 6]
 for p in zip(arr1,arr2):
     print(p) # (1, 4), (2, 5), (3, 6)
     # unpacking
     a, b = p
+
+# map(), filter(), all()
+# map(function, iterable): apply function() all items from iterable and return new iterable
+# filter(function->Bool, iterable)
+# all(iterable)
+list(map(lambda x: x**2, [1, 2, 3])) # [1, 4, 9]
+list(filter(lambda x: x%2 == 0, [1, 2, 3])) # [2]
+all(map(lambda x: x%2 == 0, [1, 2, 3])) # False
 
 # Tuple unpacking
 a, b = my_tuple
