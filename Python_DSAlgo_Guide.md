@@ -50,6 +50,7 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
     - [Salary Negotiation](#salary-negotiation)
     - [Job Search Platforms](#job-search-platforms)
     - [Typical Behavioral Questions](#typical-behavioral-questions)
+    - [Questions I got Asked](#questions-i-got-asked)
 
 ## 1. Algorithm Analysis and Big O
 
@@ -420,7 +421,7 @@ c.prev_node = b
 - [`Linked List Nth to Last Node - SOLUTION.ipynb`](./Linked%20Lists/Linked%20Lists%20Interview%20Problems/Linked%20List%20Nth%20to%20Last%20Node%20-%20SOLUTION.ipynb)
   - Problem: Write a function that takes a head node and an integer value n and then returns the n-th to last node in the linked list.
   - Solution: We use two iterators/traverses; we advance the first iterator n steps, then we advance the first and second iterator together until the first reaches the end - the second iterator must be n steps away from the tail now. 
-- [`Implement a Linked List -SOLUTION.ipynb`](./Linked%20Lists/Linked%20Lists%20Interview%20Problems/Implement%20a%20Linked%20List%20-SOLUTION.ipynb)
+- [`Implement a Linked List - SOLUTION.ipynb`](./Linked%20Lists/Linked%20Lists%20Interview%20Problems/Implement%20a%20Linked%20List%20-SOLUTION.ipynb)
   - Problem: Implement a singly linked list and a doubly linked list; often, in interviews, we're not given their implementation.
   - Solution: The implementation is in the above sections.
 
@@ -941,3 +942,10 @@ Matching:
 - How many positions have you applied for?
 - If the company's culture is public, read and learn it.
 - Be able to talk about any items on the CV.
+
+### Questions I got Asked
+
+- If you could take 2 people from your past jobs for your new role, who would they be? Describe them.
+- What's the thing you're most proud of?
+- Which are the 3 most important things you're looking for in your new role?
+- In which situation/role would you like to be in 5 years?
