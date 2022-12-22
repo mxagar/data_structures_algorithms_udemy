@@ -729,6 +729,36 @@ def square(x):
 s = lambda x: x**2
 # See also map() and filter()
 
+# Get a variable name as a string
+def get_variable_name(variable):
+    globals_dict = globals()
+    if variable:
+        return [var_name for var_name in globals_dict 
+                    if globals_dict[var_name] is variable][0]
+    else:
+        return None
+
+# Get a variable memory address
+a = [1, 2, 3, 4, 5]
+print(id(a)) # 140234866534752
+a = 12
+print(id(a)) # 94264748411744
+
+# Non-booleans evaluate as True
+# if they're not None or 0
+# This is relevant for if/while/assert
+a = -1
+b = 0.0
+c = None
+d = [1, 2]
+e = [0, 0]
+if a:
+  return True # True
+assert b # False, Error
+assert c # False, Error
+assert d # True
+assert e # True
+
 ###
 # Arrays / Lists, Strings, Dictionaries, Sets & Co.
 ###
