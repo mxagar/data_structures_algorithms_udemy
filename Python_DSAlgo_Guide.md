@@ -469,7 +469,7 @@ def factorial(k):
 
 factorial_memo = {}
 
-def factorial_1(k):
+def factorial(k):
     if k < 2: 
         return 1
     # Memoization consists in checking if we have computed the value
@@ -493,7 +493,7 @@ def factorial_1(k):
         # already; if so, we return it, if not, we compute it with
         # recursion as store it!
         if not k in factorial_memo:
-            factorial_memo[k] = k * factorial(k-1)
+            factorial_memo[k] = k * factorial_1(k-1)
         return factorial_memo[k]
   
     factorial_memo = {}
@@ -760,6 +760,21 @@ assert c # False, Error
 assert d # True
 assert e # True
 
+# Unpacking iterables as arguments
+# *args means "treat the elements of this iterable as positional arguments to this function call."
+# **kwargs means "treat the key-value pairs in the dictionary as additional named arguments to this function call."
+
+def foo(x, y):
+    print(x, y)
+
+t = (1, 2)
+foo(*t) # 1 2
+
+[1, *(2, 3), 4] # [1, 2, 3, 4]
+
+d = {'x':1, 'y':2}
+foo(**d) # 1 2
+
 ###
 # Arrays / Lists, Strings, Dictionaries, Sets & Co.
 ###
@@ -949,3 +964,5 @@ Matching:
 - What's the thing you're most proud of?
 - Which are the 3 most important things you're looking for in your new role?
 - In which situation/role would you like to be in 5 years?
+- If you start this new role, which are the first things you'd do?
+- Can you implement X from scratch?
