@@ -787,6 +787,13 @@ a[::-1]
 # Equivalent
 reversed(a)
 
+# Slicing lets out of range indices!
+a = [1,2,3]
+a[3] # Out of index ERROR
+a[5:] # [], NO ERROR!
+text = 'abc'
+text[5:] # '', NO ERROR!
+
 # Sort
 sorted(a)
 a.sort() # in place
