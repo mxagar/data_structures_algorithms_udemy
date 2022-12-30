@@ -40,6 +40,14 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [6. Trees](#6-trees)
     - [Basics and Implementation](#basics-and-implementation)
     - [Traversals](#traversals)
+    - [Priority Queues with Binary Heaps](#priority-queues-with-binary-heaps)
+      - [Tree structure and node localization](#tree-structure-and-node-localization)
+      - [Insertion of nodes](#insertion-of-nodes)
+      - [Delete minimum value](#delete-minimum-value)
+      - [Create a heap from a list](#create-a-heap-from-a-list)
+      - [Final class with all the algorithms](#final-class-with-all-the-algorithms)
+    - [Binary Search Trees (BST)](#binary-search-trees-bst)
+    - [Exercises](#exercises-4)
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
   - [9. Riddles](#9-riddles)
@@ -50,7 +58,7 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
     - [Salary Negotiation](#salary-negotiation)
     - [Job Search Platforms](#job-search-platforms)
     - [Typical Behavioral Questions](#typical-behavioral-questions)
-    - [Questions I got Asked](#questions-i-got-asked)
+    - [Questions I Got Asked](#questions-i-got-asked)
 
 ## 1. Algorithm Analysis and Big O
 
@@ -554,17 +562,26 @@ Some properties of trees:
 
 - Trees have:
   - Root, branches & leaves.
-  - Parent and children nodes; each child belongs to a parent.
+  - Parent and children nodes; each child belongs to one parent.
 - Each leaf node is unique.
+- Each node can have
+  - A name, also known as *key*.
+  - A *value* or additional information, also known as *payload*; usually the payload is not used in the algorithms, but in practice it is what we're looking for.
 - Edges are connections between parent-children nodes.
 - The root node is the only node with no incomming edges.
-- Leaf node have no children.
+- Leaf nodes have no children.
 - We can create paths in trees when we traverse the nodes.
 - There is a unique path from the root to a node.
+- Nodes that share a parent are siblings.
 - If each node has a maximum number of 2 children, we have a **binary tree**.
 - **Level** of a node: number of edges on the path from the root to the node.
 - **Height** of the tree: maximum level of an node in the tree.
 - Trees can be defined recursively: a tree is a tree if it contains a root and optionally other subtrees. That definition is relevant, because it opens the door to recursive implementations.
+- When processing trees, we can take entire branches (which are subtrees) and move them around; in fact, that's what is done when we add new nodes/branches in a given node level.
+
+Example of a binary tree:
+
+![Binary tree](./assets/binary_tree.jpg)
 
 The simplest way (non-optimal) of implementing trees in python is using **lists of lists**:
 
@@ -573,19 +590,27 @@ The simplest way (non-optimal) of implementing trees in python is using **lists 
 - And so on...
 
 ```python
+# This example is implemented with functions
+# without OOP, but it could be implemented with classes
+# as shown below
+
 def BinaryTree(r):
+    # first: root value
+    # second: left subtree
+    # third: right subtree
+    # we could extend this structure to be a general (i.e., non-binary) tree
     return [r, [], []]
 
-def insertLeft(root,newBranch):
+def insertLeft(root, newBranch):
     # We extract the lement in position 1: left child
     t = root.pop(1)
     # If the left child is not empty,
     # insert it to the left of the new branch
     # else, insert a new barnch to the empty left child of root
     if len(t) > 1:
-        root.insert(1,[newBranch,t,[]])
+        root.insert(1, [newBranch, t, []])
     else:
-        root.insert(1,[newBranch, [], []])
+        root.insert(1, [newBranch, [], []])
     return root
 
 # Same as insertLeft, but with position 2 == right side
@@ -593,15 +618,15 @@ def insertRight(root,newBranch):
     t = root.pop(2)
     if len(t) > 1:
         # Insert existing prior child to the right == position 2
-        root.insert(2,[newBranch,[],t])
+        root.insert(2, [newBranch, [], t])
     else:
-        root.insert(2,[newBranch,[],[]])
+        root.insert(2, [newBranch, [], []])
     return root
 
 def getRootVal(root):
     return root[0]
 
-def setRootVal(root,newVal):
+def setRootVal(root, newVal):
     root[0] = newVal
 
 def getLeftChild(root):
@@ -627,12 +652,15 @@ Another (more sophisticated) way of implementing a tree in python is using **Obj
 
 ```python
 class BinaryTree(object):
-    def __init__(self,rootObj):
+    def __init__(self, rootObj):
+        # The root expects a value to be stored
+        # Here we use the attribute key, but I think
+        # it would have been better to name it value/payload
         self.key = rootObj
         self.leftChild = None
         self.rightChild = None
 
-    def insertLeft(self,newNode):
+    def insertLeft(self, newNode):
         # If we have no left child, create new and add newNode
         # to root; else, create new node, add to its left the current
         # left child and assign to the left child the newly create node
@@ -641,12 +669,15 @@ class BinaryTree(object):
         if self.leftChild == None:
             self.leftChild = BinaryTree(newNode)
         else:
+            # create a new node
             t = BinaryTree(newNode)
+            # push to the left of the new node the current left node
             t.leftChild = self.leftChild
+            # the current left node is assigned the new node!
             self.leftChild = t
 
     # Same as insertLeft but for the right side
-    def insertRight(self,newNode):
+    def insertRight(self, newNode):
         if self.rightChild == None:
             self.rightChild = BinaryTree(newNode)
         else:
@@ -660,7 +691,7 @@ class BinaryTree(object):
     def getLeftChild(self):
         return self.leftChild
 
-    def setRootVal(self,obj):
+    def setRootVal(self, obj):
         self.key = obj
 
     def getRootVal(self):
@@ -684,14 +715,249 @@ print(r.getRightChild().getRootVal()) # hello
 
 ### Traversals
 
-There are 3 basic tree traversal operations:
+There are 3 basic tree traversal operations, depending on when we visit the root node:
 
 - Preorder
-  1. Visit **root** node first
-  2. Then, a recusive preorder traversal of **left** sub-tree.
-  3. Finally recursive preorder traversal of the **right** sub-tree.
+  1. First, visit **root** node.
+  2. Then, a recursive preorder traversal of **left** sub-tree.
+  3. Finally, recursive preorder traversal of the **right** sub-tree.
 - Inorder
+  1. First, a recursive inorder traversal of **left** sub-tree.
+  2. Then, visit **root** node.
+  3. Finally, recursive inorder traversal of the **right** sub-tree.
 - Postorder
+  1. First, a recursive postorder traversal of **left** sub-tree.
+  2. Then, recursive postorder traversal of the **right** sub-tree.
+  2. Finally, visit **root** node.
+
+Given the following book section tree, we would read the contents in the following order with each approach:
+
+![Tree Example: Book](./assets/tree_example_book.jpg)
+
+- Preorder: all sections and their text in the natural order: Book, Ch 1, S 1.1, S 1.2, S 1.2.1, S 1.2.2, ...
+- Inorder: we go as deep as possible first: S 1.1, Ch 1, S 1.2.1, S 1.2, ...
+- Postorder: we visit the leaves first!
+
+We can implement the traversals in the class or outside; sometimes it's preferable to implement them outside, because traversing is not necessarily a function of the tree, but a method applied on it:
+
+```python
+def preorder(tree):
+    if tree:
+        print(tree.getRootVal())
+        preorder(tree.getLeftChild())
+        preorder(tree.getRightChild())
+
+def inorder(tree):
+    if tree:
+        inorder(tree.getLeftChild())
+        print(tree.getRootVal())
+        inorder(tree.getRightChild())
+
+def postorder(tree):
+    if tree:
+        postorder(tree.getLeftChild())
+        postorder(tree.getRightChild())
+        print(tree.getRootVal())
+
+# If inside the class...
+def preorder(self)
+    print(self.key)
+    if self.leftChild:
+        self.leftChild.preorder()
+    if self.rightChild:
+        self.rightChild.preorder()
+```
+
+### Priority Queues with Binary Heaps
+
+A priority queue is a queue, but its elements are ordered according to their relevance or priority, not their order of insertion. We can:
+
+- Dequeue elements from the front, being the front item the most important one. The ones at the back have less priority.
+- Enqueue elements: they are inserted in the position determined by their relevance.
+
+A typical application is to order items in such a way that the minimum/maximum value is always at the front.
+
+The classical way to implement a priority queue is a [**binary heap**](https://en.wikipedia.org/wiki/Binary_heap), which allows to enqueue/dequeue items with `O(logn)`! Following the application of keeping the min/max value at the front, we have two variations for binary heaps:
+
+- Min heaps
+- Max heaps
+
+Some interesting additional material:
+
+- The Wikipedia article on [**binary heaps**](https://en.wikipedia.org/wiki/Binary_heap)
+- [`02_Ordered_DS`](https://github.com/mxagar/accelerated_computer_science_coursera/tree/main/02_Ordered_DS) from the Accelerated Computer Science Structures Specialization.
+
+Altogether, the following sections/operations are covered here:
+
+- [Tree structure and node localization](#tree-structure-and-node-localization)
+- [Insertion of nodes](#insertion-of-nodes)
+- [Delete minimum value](#delete-minimum-value)
+- [Create heap from a list](#create-heap-from-a-list)
+- [Final class with all the algorithms](#final-class-with-all-the-algorithms)
+
+#### Tree structure and node localization
+
+- We will work with binary trees which are **complete**, i.e.:
+  - Perfect until the last level: all nodes filled in
+  - In the last level, all the nodes pushed to the left
+- In that case, the binary tree can be represented in an array (reserving the first element), and given the position `p` of a node, the position of its children is given by `2*p + c`, `c = 0` for the left child, `c = 1` for the right. Similarly, the parent of a node in position `p` will be `p//2`.
+- Note that the first item in the list is not used so that the children-parent localization works as explained.
+
+![Binary Tree: Heap](./assets/binary_tree_heap.jpg)
+
+#### Insertion of nodes
+
+Appending to the end of the list to insert a node is compliant with the tree structure, **BUT** it violates the heap structure property. To solve that, we can re-gain the heap structure simply by swaping items! That's implemented in the function `percUp()`: it swaps the current node with its parent if the parent has a larger value (in the case of a min heap). The action is called *percolation* or *heapifying up*.
+
+![Heap: Percolate Up](./assets/heap_percolate_up_1.jpg)
+
+![Heap: Percolate Up](./assets/heap_percolate_up_2.jpg)
+
+![Heap: Percolate Up](./assets/heap_percolate_up_3.jpg)
+
+#### Delete minimum value
+
+Detecting the minimum value in a min heap is very easy: it's always going to be the root! However, popping it complicates the situation: we need to percolate down or swap nodes so that the heap structure is not violated.
+
+The following steps are followed:
+
+- We remove the root node, which contains the minimum element in the min heap.
+- We replace the empty root with the last item in the heap list.
+- We percolate down the new root: we check its children (left/right) and swap it with the smallest one; the process continues until the children beneath are larger.
+
+![Heap: Percolate Down](./assets/heap_percolate_down_1.jpg)
+
+![Heap: Percolate Down](./assets/heap_percolate_down_2.jpg)
+
+![Heap: Percolate Down](./assets/heap_percolate_down_3.jpg)
+
+![Heap: Percolate Down](./assets/heap_percolate_down_4.jpg)
+
+#### Create a heap from a list
+
+We could create a heap from a list by inserting the items one by one. However, a more efficient way, `O(n)`, is the following:
+
+- We assign the unordered list to the heap list.
+- Then, we start percolating down all the nodes in the heap/tree except the leaves; recall that each level, we double the nodes in a binary tree as a heap - thus, num_nodes//2 equals all nodes except the leaves. This works in `O(n)`.
+
+![Heap from list](./assets/heap_from_list.jpg)
+
+#### Final class with all the algorithms
+
+```python
+# Note: This is the implmentation of the Min Heap
+# The children nodes have always a smaller value than their parents.
+# The root node contains the smallest value in the tree.
+
+class BinHeap:
+    def __init__(self):
+        # The first 0 element of the heap is not used
+        # it's there for convenience in the tree node locailzation
+        self.heapList = [0]
+        self.currentSize = 0
+
+    def percUp(self,i):
+        # percUp() swaps the current node with its parent
+        # if the parent has a larger value. That ensures
+        # that the inserted node doesn't break the heap
+        # structure in the array; i.e., to insert a node,
+        # we simply append it to the end and then
+        # apply percUp until the parent of the node is smaller.
+        while i // 2 > 0:
+            if self.heapList[i] < self.heapList[i // 2]:
+                tmp = self.heapList[i // 2]
+                self.heapList[i // 2] = self.heapList[i]
+                self.heapList[i] = tmp
+            i = i // 2
+
+    def insert(self,k):
+        # Appending to the end of the list to insert a node
+        # is compliant with the tree structure, BUT
+        # it violates the heap structure property.
+        # To solve that, we can re-gain the heap structure
+        # simply by swaping items! That's percUp()
+        # percUp() swaps the current node with its parent
+        # if the parent has a larger value.
+        self.heapList.append(k)
+        self.currentSize = self.currentSize + 1
+        self.percUp(self.currentSize)
+
+    def percDown(self,i):
+        # We have removed the root node and replaced it with
+        # the last node; now, we need to fix the heap structure
+        # by percolating down the swaped node.
+        # Basically, the new root is swaped with the smallest child
+        # beneath until there's no smaller child.
+        while (i * 2) <= self.currentSize:
+            # Select smallest child: left or right?
+            mc = self.minChild(i)
+            # If current node is larger than the smallest child
+            # SWAP both!
+            if self.heapList[i] > self.heapList[mc]:
+                tmp = self.heapList[i]
+                self.heapList[i] = self.heapList[mc]
+                self.heapList[mc] = tmp
+            i = mc
+
+    def minChild(self,i):
+        # Select the smallest child of node i: left or right?
+        if i * 2 + 1 > self.currentSize:
+            return i * 2
+        else:
+            if self.heapList[i*2] < self.heapList[i*2+1]:
+                return i * 2
+            else:
+                return i * 2 + 1
+
+    def delMin(self):
+        # We remove the root node, which contains the
+        # minimum element in the min heap.
+        # To ensure the heap structure, we need to
+        # swap the nodes with percDown()
+        retval = self.heapList[1] # root node
+        # Swap last node to root position
+        self.heapList[1] = self.heapList[self.currentSize]
+        # Update size
+        self.currentSize = self.currentSize - 1
+        # Remove last node, because we moved it to the root
+        self.heapList.pop()
+        # Percolate down the new root node
+        self.percDown(1)
+        return retval
+
+    def buildHeap(self,alist):
+        # We assign the unordered list to the heap list
+        # Then, we start percolating down all the nodes in the heap/tree
+        # except the leaves; recall that each level, we double the nodes
+        # in a binary tree as a heap - thus, num_nodes//2 equals all nodes
+        # except the leaves.
+        # This works in O(n)
+        i = len(alist) // 2
+        self.currentSize = len(alist)
+        self.heapList = [0] + alist[:]
+        while (i > 0):
+            self.percDown(i)
+            # Percolate all nodes up in the tree
+            # Go up in the tree, that way we know that wan't below
+            # has already been fixed.
+            i = i - 1
+```
+
+### Binary Search Trees (BST)
+
+Key-value mappings can be achieved in two major ways:
+
+- Hash tables: dictionaries.
+- Binary search trees.
+
+Binary search trees are defined with the **BST property**: keys that are less than the parent are found in the left subtree and key that are larger than the parent are found in the right subtree.
+
+
+
+![Binary Search Tree](./assets/binary_search_tree.jpg)
+
+
+### Exercises
 
 
 
@@ -722,6 +988,10 @@ a = [1, 2, 3]
 b = a.copy()
 b != a # False: values compared
 b is not a # True: memory address compared
+
+# Divisions and modulo
+5//2 # 2
+5%2 # 1
 
 # Lambda functions
 def square(x):
@@ -813,6 +1083,14 @@ for k in d.keys():
 # List/Dictionary comprehensions & enumerate
 [v for v in range(10) if v%2 == 0] # [0, 2, 4, 6, 8]
 {k:v for k,v in enumerate(range(0,10,2))} # {0: 0, 1: 2, 2: 4, 3: 6, 4: 8}
+
+# Conditional loops
+for i in [n for n in numbers if n%2 ==0]:
+    pass
+# ... prefer them to for+if 
+for i in numbers:
+    if i%2 == 0:
+        pass
 
 # Sets: nice way of reducing time complexity!
 s = set()
@@ -965,7 +1243,7 @@ Matching:
 - If the company's culture is public, read and learn it.
 - Be able to talk about any items on the CV.
 
-### Questions I got Asked
+### Questions I Got Asked
 
 - If you could take 2 people from your past jobs for your new role, who would they be? Describe them.
 - What's the thing you're most proud of?
@@ -973,3 +1251,4 @@ Matching:
 - In which situation/role would you like to be in 5 years?
 - If you start this new role, which are the first things you'd do?
 - Can you implement X from scratch?
+
