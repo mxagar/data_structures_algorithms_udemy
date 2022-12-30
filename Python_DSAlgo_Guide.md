@@ -47,6 +47,10 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
       - [Create a heap from a list](#create-a-heap-from-a-list)
       - [Final class with all the algorithms](#final-class-with-all-the-algorithms)
     - [Binary Search Trees (BST)](#binary-search-trees-bst)
+      - [Insert a node](#insert-a-node)
+      - [Retrieve a value](#retrieve-a-value)
+      - [Delete a node](#delete-a-node)
+      - [BST implementation code](#bst-implementation-code)
     - [Exercises](#exercises-4)
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
@@ -728,7 +732,7 @@ There are 3 basic tree traversal operations, depending on when we visit the root
 - Postorder
   1. First, a recursive postorder traversal of **left** sub-tree.
   2. Then, recursive postorder traversal of the **right** sub-tree.
-  2. Finally, visit **root** node.
+  3. Finally, visit **root** node.
 
 Given the following book section tree, we would read the contents in the following order with each approach:
 
@@ -952,10 +956,339 @@ Key-value mappings can be achieved in two major ways:
 
 Binary search trees are defined with the **BST property**: keys that are less than the parent are found in the left subtree and key that are larger than the parent are found in the right subtree.
 
-
-
 ![Binary Search Tree](./assets/binary_search_tree.jpg)
 
+To implement a tree, two classes are defined:
+
+- `TreeNode`
+- `BinarySearchTree`
+
+In the following, the most important operations are explained, followed by the code that implements the binary search tree:
+
+- [Insert a node](#insert-a-node)
+- [Retrieve a value](#retrieve-a-value)
+- [Delete a node](#delete-a-node)
+- [BST implementation code](#bst-implementation-code)
+
+#### Insert a node
+
+To **insert** a node with the key-value pair, we call a `put()` method, which inserts the node in its correct place by recursively calling itself and checking the left and right node keys. Note that the implementation shown below has an issue with duplicate keys: it is commented in the code.
+
+Example of inserting a node with key 19:
+
+![BST: Insert a Node](./assets/bst_insert_node.jpg)
+
+#### Retrieve a value
+
+To **retrieve the value of a node given its key**, we call the `get()` method, which searches recursively a given key until it is found of we end up in a leaf without having found the key. The method is easier than `put()` and it also uses a private recursive call.
+
+#### Delete a node
+
+Key deletion is the most challenging operation in BSTs.
+
+Steps:
+
+- First, find the node to delete by searching its key: `_get()`; the key can be:
+  - not found: error
+  - the root itself
+  - another node
+- Second, if the node is found, we call the function `remove()`.
+
+The function `remove()` distinguishes 3 cases:
+
+1. Case 1: The node to be deleted has no children, i.e., it's a leaf. In that case, we just delete the node by removing its reference in its parent.
+2. Case 2: The node to be deleted has only one child. In that case, we promote the child to take the place of its removed parent, i.e., we replace the node with its child. The replacement needs to take into account whether the node is left/right/root and whether its child is left/right to set the references correctly.
+3. Case 3: The node to be deleted has two children; it's the most general and difficult case. It works in two steps:
+   - We find its successor: that's the node with the next largest key in the tree. The successor is found with `findSuccessor()` and `findMin()`.
+   - We remove the successor with `spliceOut()`.
+   - We replace the current deleted node with the successor key-value pair.
+
+![BST: Delete node, case 1 - leaf](./assets/bst_delete_node_1.jpg)
+
+![BST: Delete node, case 2 - one child](./assets/bst_delete_node_2.jpg)
+
+![BST: Delete node, case 3 - two children](./assets/bst_delete_node_3.jpg)
+
+#### BST implementation code
+
+All the previous sections are implemented here in addition to the special methods `__setitem__`, `__getitem__`, `__delitem__`, `__iter__`, etc.
+
+```python
+# Basic node class
+# which contains the key-value pair
+# as well as references to 
+# left child, right child, parent
+class TreeNode:
+    def __init__(self, key, val, left=None, right=None, parent=None):
+        self.key = key
+        self.payload = val
+        self.leftChild = left
+        self.rightChild = right
+        self.parent = parent
+
+    def hasLeftChild(self):
+        return self.leftChild
+
+    def hasRightChild(self):
+        return self.rightChild
+
+    def isLeftChild(self):
+        return self.parent and self.parent.leftChild == self
+
+    def isRightChild(self):
+        return self.parent and self.parent.rightChild == self
+
+    def isRoot(self):
+        return not self.parent
+
+    def isLeaf(self):
+        return not (self.rightChild or self.leftChild)
+
+    def hasAnyChildren(self):
+        return self.rightChild or self.leftChild
+
+    def hasBothChildren(self):
+        return self.rightChild and self.leftChild
+
+    def replaceNodeData(self, key, value, lc, rc):
+        self.key = key
+        self.payload = value
+        self.leftChild = lc
+        self.rightChild = rc
+        if self.hasLeftChild():
+            self.leftChild.parent = self
+        if self.hasRightChild():
+            self.rightChild.parent = self
+
+    def __iter__(self):
+        # Inorder iterator/traverse
+        # yield returns a value and freezes the function 
+        # so the next time it is called
+        # it goes to the point it exited.
+        # This code is recursive!
+        # That's because its a generator in a loop
+        # which calls the children of a tree every time.
+        if self:
+            if self.hasLeftChild():
+                for elem in self.leftChild:
+                    yield elem
+            yield self.key
+            if self.hasRightChild():
+                for elem in self.rightChild:
+                    yield elem
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+        self.size = 0
+
+    def length(self):
+        return self.size
+
+    def __len__(self):
+        # len(BinarySearchTree)
+        return self.size
+
+    def put(self, key, val):
+        # Initial check + call private _put
+        if self.root:
+            self._put(key, val, self.root)
+        else:
+            self.root = TreeNode(key, val)
+        self.size = self.size + 1
+
+    def _put(self, key, val, currentNode):
+        # Actual (private) put method that
+        # 1) Checks whether the key is larger (right) / smaller (left) than the current node
+        # 2) Recursively calls put() to insert the key-value pair in the correct place
+        # HOWEVER: This method has an issue: it doesn't check
+        # for duplicate keys, i.e., duplicates are inserted as the right child
+        # so they are pushed down and never found, because the first one will be found first.
+        # A solution is to REPLACE a node with a duplicate key.
+        # To that end, I understand that we should add a 3rd new case in this if
+        # and use replaceNodeData() in the case key == currentNode.key.
+        if key < currentNode.key:
+            # the key to be inserted is not smaller than the
+            # search node we're in, thus, it should be put
+            # on its left (BST property)
+            if currentNode.hasLeftChild():
+                # if there is a left child,
+                # we need to use the put() method to push the correct node
+                # downwards
+                self._put(key, val, currentNode.leftChild)
+            else:
+                # if there's no left child, we create one
+                currentNode.leftChild = TreeNode(key,
+                                                 val,
+                                                 parent=currentNode)
+        else:
+            # the key to be inserted is not smaller than the
+            # search node we're in, thus, it should be put
+            # on its right (BST property)
+            if currentNode.hasRightChild():
+                # if there is a right child,
+                # we need to use the put() method to push the correct node
+                # downwards
+                self._put(key, val, currentNode.rightChild)
+            else:
+                # if there's no right child, we create one
+                currentNode.rightChild = TreeNode(key,
+                                                  val,
+                                                  parent=currentNode)
+
+    def __setitem__(self, k, v):
+        # BinarySearchTree[k] = v
+        self.put(k, v)
+
+    def get(self, key):
+        # Search for the key in the tree
+        # and return its value if found.
+        # The private _get() method is used recursively.
+        if self.root:
+            res = self._get(key, self.root)
+            # If something not None found, return it
+            if res:
+                return res.payload
+            else:
+                return None
+        else:
+            return None
+
+    def _get(self, key, currentNode):
+        # If currentNode is None, return None
+        if not currentNode:
+            return None
+        # If key found, return nodes's value/payload
+        # Recursion ends here
+        elif currentNode.key == key:
+            return currentNode
+        # If key is smaller than current node -> go to left (+ recursion)
+        elif key < currentNode.key:
+            return self._get(key,currentNode.leftChild)
+        # If key is smaller than current node -> go to right (+ recursion)
+        else:
+            return self._get(key,currentNode.rightChild)
+
+    def __getitem__(self, key):
+        # v = BinarySearchTree[k]
+        return self.get(key)
+
+    def __contains__(self, key):
+        # k in BinarySearchTree
+        if self._get(key, self.root):
+            return True
+        else:
+            return False
+
+    def delete(self, key):
+        if self.size > 1:
+            nodeToRemove = self._get(key, self.root)
+            if nodeToRemove:
+                self.remove(nodeToRemove)
+                self.size = self.size - 1
+            else:
+                raise KeyError('Error, key not in tree')
+        elif self.size == 1 and self.root.key == key:
+            self.root = None
+            self.size = self.size - 1
+        else:
+            raise KeyError('Error, key not in tree')
+
+    def __delitem__(self, key):
+        # del BinarySearchTree[k]
+        self.delete(key)
+
+    def spliceOut(self):
+        if self.isLeaf():
+            if self.isLeftChild():
+                self.parent.leftChild = None
+            else:
+                self.parent.rightChild = None
+        elif self.hasAnyChildren():
+            if self.hasLeftChild():
+                if self.isLeftChild():
+                    self.parent.leftChild = self.leftChild
+                else:
+                    self.parent.rightChild = self.leftChild
+                    self.leftChild.parent = self.parent
+        else:
+            if self.isLeftChild():           
+                self.parent.leftChild = self.rightChild
+            else:
+                self.parent.rightChild = self.rightChild
+                self.rightChild.parent = self.parent
+
+    def findSuccessor(self):
+        # The successor is the next largest key in the tree
+        succ = None
+        if self.hasRightChild():
+            # If the node has a right child, the next largest key
+            # must be the minimum key down the right branch,
+            # the leftmost key in the right branch.
+            succ = self.rightChild.findMin()
+        else:
+            if self.parent: # not root, else None returned
+                if self.isLeftChild():
+                    succ = self.parent
+                else:
+                    self.parent.rightChild = None
+                    succ = self.parent.findSuccessor()
+                    self.parent.rightChild = self
+        return succ
+
+    def findMin(self):
+        # The minimum value will be always to the left!
+        # We keep going left until there no left child
+        # Thus, the minimum value is the left-most leaf
+        current = self
+        while current.hasLeftChild():
+            current = current.leftChild
+        return current
+
+    def remove(self, currentNode):
+        if currentNode.isLeaf(): # Leaf: remove reference to in in parent
+            if currentNode == currentNode.parent.leftChild:
+                currentNode.parent.leftChild = None
+            else:
+                currentNode.parent.rightChild = None
+        elif currentNode.hasBothChildren(): # Interior, 2 children
+            succ = currentNode.findSuccessor()
+            succ.spliceOut() # remove successor from tree
+            # Replace removed node (current) with successor's key-value pair
+            currentNode.key = succ.key
+            currentNode.payload = succ.payload
+        else: # This node has one child
+            # We promote the child to take the place
+            # of its removed parent; i.e., we replace the node
+            # with its child. The replacement needs to take into account
+            # whether the node is left/right/root
+            # and whether its child is left/right
+            # to set the references correctly.
+            if currentNode.hasLeftChild():
+                if currentNode.isLeftChild():
+                    currentNode.leftChild.parent = currentNode.parent
+                    currentNode.parent.leftChild = currentNode.leftChild
+                elif currentNode.isRightChild():
+                    currentNode.leftChild.parent = currentNode.parent
+                    currentNode.parent.rightChild = currentNode.leftChild
+                else: # root
+                    currentNode.replaceNodeData(currentNode.leftChild.key,
+                                    currentNode.leftChild.payload,
+                                    currentNode.leftChild.leftChild,
+                                    currentNode.leftChild.rightChild)
+            else:
+                if currentNode.isLeftChild():
+                    currentNode.rightChild.parent = currentNode.parent
+                    currentNode.parent.leftChild = currentNode.rightChild
+                elif currentNode.isRightChild():
+                    currentNode.rightChild.parent = currentNode.parent
+                    currentNode.parent.rightChild = currentNode.rightChild
+                else:
+                    currentNode.replaceNodeData(currentNode.rightChild.key,
+                                    currentNode.rightChild.payload,
+                                    currentNode.rightChild.leftChild,
+                                    currentNode.rightChild.rightChild)
+```
 
 ### Exercises
 
