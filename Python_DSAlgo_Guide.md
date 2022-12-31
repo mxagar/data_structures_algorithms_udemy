@@ -1070,12 +1070,13 @@ class TreeNode:
         # which calls the children of a tree every time.
         if self:
             if self.hasLeftChild():
-                for elem in self.leftChild:
-                    yield elem
-            yield self.key
+                for elem in self.leftChild: # we're using the generator!
+                    yield elem # this is a key!
+            yield self.key # base case, recursion ends
             if self.hasRightChild():
                 for elem in self.rightChild:
                     yield elem
+
 
 class BinarySearchTree:
     def __init__(self):
