@@ -23,20 +23,20 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [2. Array Sequences](#2-array-sequences)
     - [Basics](#basics)
     - [Dynamic Arrays](#dynamic-arrays)
-    - [Exercises](#exercises)
+    - [Array Exercises](#array-exercises)
   - [3. Stacks, Queues and Deques](#3-stacks-queues-and-deques)
     - [Stacks](#stacks)
     - [Queues](#queues)
     - [Deques](#deques)
-    - [Exercises](#exercises-1)
+    - [Stack \& Queue Exercises](#stack--queue-exercises)
   - [4. Linked Lists](#4-linked-lists)
     - [Singly Linked Lists](#singly-linked-lists)
     - [Doubly Linked Lists](#doubly-linked-lists)
-    - [Exercises](#exercises-2)
+    - [List Exercises](#list-exercises)
   - [5. Recursion](#5-recursion)
     - [Recursion Basics](#recursion-basics)
     - [Memoization and Dynamic Programming](#memoization-and-dynamic-programming)
-    - [Exercises](#exercises-3)
+    - [Recursion Exercises](#recursion-exercises)
   - [6. Trees](#6-trees)
     - [Basics and Implementation](#basics-and-implementation)
     - [Traversals](#traversals)
@@ -51,7 +51,7 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
       - [Retrieve a value](#retrieve-a-value)
       - [Delete a node](#delete-a-node)
       - [BST implementation code](#bst-implementation-code)
-    - [Exercises](#exercises-4)
+    - [Tree Exercises](#tree-exercises)
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
   - [9. Riddles](#9-riddles)
@@ -195,7 +195,7 @@ sys.getsizeof(data) # 96
 - Exercise in which that manual allocation is implemented: [`Dynamic Array Exercise.ipynb`](./Array%20Sequences/Dynamic%20Array%20Exercise.ipynb)
 - Amortization: if we extend the capacity by doubling the current one, we achieve an amortized extension complexity of `O(1)*`.
 
-### Exercises
+### Array Exercises
 
 The exercises with solutions and comments are located in [`Array Sequences`](./Array%20Sequences/):
 
@@ -331,7 +331,7 @@ class Deque:
         return len(self.items)
 ```
 
-### Exercises
+### Stack & Queue Exercises
 
 - [`Balanced Parentheses Check - SOLUTION.ipynb`](./Stacks%2C%20Queues%20and%20Deques/Stacks%2C%20Queues%2C%20Deques%20Interview%20Questions%20-SOLUTIONS/Balanced%20Parentheses%20Check%20-%20SOLUTION.ipynb)
   - Problem: Given a set of parenthesis, determine if it's balanced or not.
@@ -422,7 +422,7 @@ b.next_node = c
 c.prev_node = b
 ```
 
-### Exercises
+### List Exercises
 
 - [`Singly Linked List Cycle Check - SOLUTION.ipynb`](./Linked%20Lists/Linked%20Lists%20Interview%20Problems/Singly%20Linked%20List%20Cycle%20Check%20-%20SOLUTION.ipynb)
   - Problem: Given a singly linked list, write a function which takes in the first node in a singly linked list and returns a boolean indicating if the linked list contains a "cycle". A cycle is when a node's next point actually points back to a previous node in the list. This is also sometimes known as a circularly linked list.
@@ -540,7 +540,7 @@ factorial_1(20)
 factorial_2(20)
 ```
 
-### Exercises
+### Recursion Exercises
 
 - [`Recursion Problem 1 - Reverse String - SOLUTION.ipynb`](./Recursion/Recursion%20Problems%20-%20%20SOLUTIONS/Recursion%20Problem%201%20-%20Reverse%20String%20-%20SOLUTION.ipynb)
   - Problem: Reverse a string with recursion.
@@ -606,7 +606,7 @@ def BinaryTree(r):
     return [r, [], []]
 
 def insertLeft(root, newBranch):
-    # We extract the lement in position 1: left child
+    # We extract the element in position 1: left child
     t = root.pop(1)
     # If the left child is not empty,
     # insert it to the left of the new branch
@@ -1291,7 +1291,28 @@ class BinarySearchTree:
                                     currentNode.rightChild.rightChild)
 ```
 
-### Exercises
+### Tree Exercises
+
+Recall that a tree can be simply implemented with a `Node` class:
+
+```python
+class Node:
+    def __init__(self, key, value, left=None, right=None):
+        self.key = key
+        self.value = value
+        self.left = left
+        self.right = right
+```
+
+- [`Binary Search Tree Check - SOLUTION.ipynb`](./Trees/Trees%20Interview%20Problems%20-%20SOLUTIONS/Binary%20Search%20Tree%20Check%20-%20SOLUTION.ipynb):
+  - Problem: Check if a tree is a Binary Search Tree (BST).
+  - Solution: BST property is checked: given a node, its value must be between the values of the left and right children. The property is checked with recursive calls given a node.
+- [`Tree Level Order Print - SOLUTION.ipynb`](./Trees/Trees%20Interview%20Problems%20-%20SOLUTIONS/Tree%20Level%20Order%20Print%20-%20SOLUTION.ipynb)
+  - Problem: Given a binary tree of integers, print it in level order. The output will contain space between the numbers in the same level, and new line between different levels.
+  - Solution: a FIFO queue (a list, basically) is filled with root node; then, we perform `pop(0)` from it, print the node's key and and `append()` its children in a while loo
+- [`Trim a Binary Search Tree - SOLUTION.ipynb`](./Trees/Trees%20Interview%20Problems%20-%20SOLUTIONS/Trim%20a%20Binary%20Search%20Tree%20-%20SOLUTION.ipynb)
+  - Problem: Given the root of a binary search tree and 2 numbers min and max, trim the tree such that all the numbers in the new tree are between min and max (inclusive). The resulting tree should still be a valid binary search tree.
+  - Solution
 
 
 
@@ -1348,6 +1369,11 @@ a = [1, 2, 3, 4, 5]
 print(id(a)) # 140234866534752
 a = 12
 print(id(a)) # 94264748411744
+
+# Casting
+str(1) # "1"
+int(1.01) # 1
+float(1) # 1.0
 
 # Non-booleans evaluate as True
 # if they're not None or 0
@@ -1426,6 +1452,14 @@ for i in numbers:
     if i%2 == 0:
         pass
 
+# Initialize, append, pop
+a = []
+a.append(1) # [1]
+a.extend([2, 3]) # [1, 2, 3]
+a.append([4, 5]) # [1, 2, 3, [4, 5]]
+b = a.pop() # a = [1, 2, 3], b = [4, 5]
+c = a.pop(0) # a = [2, 3], c = 1
+
 # Sets: nice way of reducing time complexity!
 s = set()
 s.add(obj) # can be an int, tuple, etc.
@@ -1484,6 +1518,12 @@ Counter('abracadabra').most_common(3)   # [('a', 5), ('b', 2), ('r', 2)]
 import collections
 d = collections.defaultdict(int)
 d[1] += 1 # even though d[1] was not created explicitly, it's initialized
+# Deque: double ended queue, can be used as stack/queue
+# pop & append work on the right; for the left, we have:
+from collections import deque
+numbers = deque([1, 2, 3, 4])
+numbers.popleft() # 1
+numbers.appendleft(10) # [10, 2, 3, 4]
 
 # String handling basics
 # Reverse a text
