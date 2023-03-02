@@ -1439,6 +1439,11 @@ d = {}
 d['key'] = 'value'
 for k in d.keys():
     pass
+# To .extend() a dictionary
+a.update(b) # dictionary a gets k:v from b and we get None in return
+# Also with dictionaries
+for k, v in d.items():
+    pass
 
 # List/Dictionary comprehensions & enumerate
 [v for v in range(10) if v%2 == 0] # [0, 2, 4, 6, 8]
