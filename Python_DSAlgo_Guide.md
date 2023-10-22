@@ -58,6 +58,7 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [10. Python Tips \& Tricks](#10-python-tips--tricks)
     - [Python Tools](#python-tools)
     - [Testing](#testing)
+    - [Tricks](#tricks)
   - [11. Other Topics](#11-other-topics)
     - [Salary Negotiation](#salary-negotiation)
     - [Job Search Platforms](#job-search-platforms)
@@ -1568,6 +1569,21 @@ t.test(square)
 
 ```
 
+### Tricks
+
+```python
+## Get code of a function/class
+import inspect
+
+# Previously defined, somewhere...
+class MyClass:
+    def my_method(self):
+        print("Hello, world!")
+
+# In some other part of the code:
+source_code = inspect.getsource(MyClass)
+print(source_code)
+```
 
 ## 11. Other Topics
 
