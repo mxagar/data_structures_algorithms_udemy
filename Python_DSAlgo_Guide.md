@@ -56,6 +56,7 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [8. Graph Algorithms](#8-graph-algorithms)
   - [9. Riddles](#9-riddles)
   - [10. Python Tips \& Tricks](#10-python-tips--tricks)
+    - [Interesting Articles, Links](#interesting-articles-links)
     - [Python Tools](#python-tools)
     - [Testing](#testing)
     - [Tricks](#tricks)
@@ -1324,6 +1325,10 @@ class Node:
 ## 9. Riddles
 
 ## 10. Python Tips & Tricks
+
+### Interesting Articles, Links
+
+- [12 Python Features Every Data Scientist Should Know](https://medium.com/bitgrit-data-science-publication/12-python-features-every-data-scientist-should-know-1d233dbaab0c)
 
 ### Python Tools
 
