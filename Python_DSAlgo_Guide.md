@@ -1329,6 +1329,7 @@ class Node:
 ### Interesting Articles, Links
 
 - [12 Python Features Every Data Scientist Should Know](https://medium.com/bitgrit-data-science-publication/12-python-features-every-data-scientist-should-know-1d233dbaab0c)
+-[10 Python Anti-Patterns You Must Avoid When Writing Clean Code](https://medium.com/python-in-plain-english/10-python-anti-patterns-you-must-avoid-when-writing-clean-code-ff3635ca1510)
 
 ### Python Tools
 
@@ -1375,6 +1376,13 @@ a = [1, 2, 3, 4, 5]
 print(id(a)) # 140234866534752
 a = 12
 print(id(a)) # 94264748411744
+
+# Check type: isinstance()
+a = "hello"
+if isinstance(a, int):
+    print(1+a)
+else:
+    print(s)
 
 # Casting
 str(1) # "1"
@@ -1429,6 +1437,14 @@ a[3] # Out of index ERROR
 a[5:] # [], NO ERROR!
 text = 'abc'
 text[5:] # '', NO ERROR!
+
+# Check if element in list:
+# -> first transform into set, because it's a hash table => O(1) serach!
+L = ["San Sebastian", "Bilbao", "Gasteiz", "Eibar", "Irun"]
+S = set(l)
+K = "Madrid"
+if K in S:
+    print(f"{K} is in L")
 
 # Sort
 sorted(a)
