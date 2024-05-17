@@ -10,7 +10,11 @@ I added comments and alternative implementations in some cases.
 
 A non-exasutive *guide* with notes can be found in [`Python_DSAlgo_Guide.md`](Python_DSAlgo_Guide.md).
 
+Another related repository of mine is [design_patterns_notes](https://github.com/mxagar/design_patterns_notes). I created that repository while following the Udemy course [Design Patterns in Python](https://www.udemy.com/course/design-patterns-python/) by Dmitri Nesteruk.
+
+<!--
 Another related repository of mine is [python_interviews](https://github.com/mxagar/python_interviews). I created that repository while following the course / learning path [Ace the Python Coding Interview](https://www.educative.io/path/ace-python-coding-interview) in [educative.io](educative.io).
+-->
 
 Mikel Sagardia, 2022.  
 No guarantees.
