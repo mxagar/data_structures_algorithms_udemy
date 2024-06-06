@@ -1614,10 +1614,26 @@ print(source_code)
 
 ### Salary Negotiation
 
-- Wait the topic to be raised.
-- Know your value and prove a range based off a minimum.
-- Check company salaries: [https://www.glassdoor.com](https://www.glassdoor.com).
-- It is often said the it's better to let the company to make the first move. Whatever.
+- Wait the topic to be raised?
+- Know your market value.
+  - Check company salaries: [https://www.glassdoor.com](https://www.glassdoor.com).
+- It is often said the it's better to let the company to make the first move. I don't know if that's true.
+- Strategies for every 2-party negotiation:
+  - There are 2 ranges: *my* [min, max] and *their* [min, max]
+    - My min: the minimum amount I am ready to accept, the lowest I am ready to go
+    - My max: the amount I would like to get
+    - Their min: the amount they would like to pay
+    - Their max: maximum they are ready to pay, the highest they are ready to go
+  - A negotiation can be viewed as discovering *their* range and setting the discussion in their max.
+  - When amounts are mentioned
+    - They usually mention *their* min
+    - We usually mention *our* max, or we star bluffing above our max
+    - (Assume they know all these 2 points!)
+  - Strategy:
+    - Discover *their* **real** max as soon as possible.
+    - Place the negotiation around that max.
+    - Try not to reveal our entire range.
+    - If we bluff (we mention a max larger than our **real** max and outside from their range) the negotiation could stop because they understand our max is too much; alternatively, we need to decrease our mentioned max.
 - Interesting lecture: [How to Negotiate Your Job Offer - Prof. Deepak Malhotra (Harvard Business School)](https://www.youtube.com/watch?v=km2Hd_xgo9Q)
 
 ### Job Search Platforms
@@ -1640,28 +1656,30 @@ Matching:
 ### Typical Behavioral Questions
 
 - Tell me about yourself
-  - Brief history + accomplishments
+  - Brief history + accomplishments.
+  - Be able to extend on any items on the CV, e.g., projects, etc.
 - Why are you leaving your current position
-  - Be positive, show what we want
-  - Emphasize departure will be professional
-  - Ambition, goals, growing, responsibilities
+  - Be honest and positive, show what we want.
+  - Tell about our ambition, goals, growing, responsibilities; recall: the match needs to be mutual!
 - Why do you want this position?
-  - Show passion.
-  - Confidence.
+  - Show your passion.
+  - Be confident.
 - Where do you see yourself in 5 years?
-  - Show you have a plan.
+  - Show your plan.
 - What's you greatest weakness?
   - Turn question around and show areas that need improvement.
+  - Also, talk about how you've improved your weaknesses.
+  - Give real concrete examples.
 - What do you know about our company?
-  - Do your research beforehand.
+  - Do your research beforehand!
+  - If the company's culture is public, read and learn it.
 - What's the most difficult situation you had to face at a job?
   - Focus on the solution to the situation.
+  - What did I learn?
 - What do you think makes a successful manager?
-  - Show your management style and philosophy.
+  - Show your management style and philosophy; remember: match needs to be mutual.
   - Teamwork, leading by example.
 - How many positions have you applied for?
-- If the company's culture is public, read and learn it.
-- Be able to talk about any items on the CV.
 
 ### Questions I Got Asked
 
@@ -1671,4 +1689,3 @@ Matching:
 - In which situation/role would you like to be in 5 years?
 - If you start this new role, which are the first things you'd do?
 - Can you implement X from scratch?
-
