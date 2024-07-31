@@ -59,7 +59,10 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
   - [9. Riddles](#9-riddles)
-  - [10. Python Tips \& Tricks](#10-python-tips--tricks)
+  - [10. Extra: Tries](#10-extra-tries)
+  - [11. Extra: Hash Tables](#11-extra-hash-tables)
+  - [12. Extra: Combinations, Permutations and Co.](#12-extra-combinations-permutations-and-co)
+  - [13. Extra: Python Tips \& Tricks](#13-extra-python-tips--tricks)
     - [Interesting Articles, Links](#interesting-articles-links)
     - [Python Tools](#python-tools)
     - [Testing](#testing)
@@ -1328,7 +1331,13 @@ class Node:
 
 ## 9. Riddles
 
-## 10. Python Tips & Tricks
+## 10. Extra: Tries
+
+## 11. Extra: Hash Tables
+
+## 12. Extra: Combinations, Permutations and Co.
+
+## 13. Extra: Python Tips & Tricks
 
 ### Interesting Articles, Links
 
