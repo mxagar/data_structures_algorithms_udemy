@@ -1,12 +1,14 @@
 # Python for Algorithms, Data-Structures, and Interviews
 
-This repository contains a compilation of algorithm & data structure implementations in python. I forked it originally from a repository by J.M. Portilla, who has a Udemy course on the topic:
+This repository contains a compilation of algorithms & data structures and their implementations in Python. I forked it originally from a repository by J.M. Portilla, who has a Udemy course on the topic:
 
 [Python for Algorithms, Data-Structures, and Interviews](https://www.udemy.com/course/python-for-data-structures-algorithms-and-interviews)
 
-I added comments and alternative implementations in some cases.
+Additionally, I added comments and alternative implementations, in some cases after checking other resources, such as (always referenced):
 
-:warning: This repository is some kind of sandbox where I try things, so if don't expect it to be tidy and 100% PEP8-compliant :stuck_out_tongue_winking_eye:.
+- Educative: [Ace the Python Coding Interview](https://www.educative.io/path/ace-python-coding-interview)
+- DataCamp: [Writing Efficient Python Code](https://app.datacamp.com/learn/courses/writing-efficient-python-code)
+- Cousera: [Accelerated Computer Science Fundamentals Specialization](https://www.coursera.org/specializations/cs-fundamentals); check my notes on the Specialization: [mxagar/accelerated_computer_science_coursera](https://github.com/mxagar/accelerated_computer_science_coursera).
 
 **The present file is a (non-exhaustive) guide of the repository and the course.**
 
@@ -15,6 +17,8 @@ Another related repository of mine is [design_patterns_notes](https://github.com
 <!--
 Another related repository of mine is [python_interviews](https://github.com/mxagar/python_interviews). I created that repository while following the course / learning path [Ace the Python Coding Interview](https://www.educative.io/path/ace-python-coding-interview) in [educative.io](educative.io).
 -->
+
+*:warning: Disclaimer: This repository is some kind of sandbox where I try things, so if don't expect it to be tidy and 100% PEP8-compliant :stuck_out_tongue_winking_eye:.*
 
 ## Overview of Contents
 
@@ -56,22 +60,18 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
       - [Delete a node](#delete-a-node)
       - [BST implementation code](#bst-implementation-code)
     - [Tree Exercises](#tree-exercises)
+    - [Extra: Tries](#extra-tries)
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
   - [9. Riddles](#9-riddles)
-  - [10. Extra: Tries](#10-extra-tries)
-  - [11. Extra: Hash Tables](#11-extra-hash-tables)
-  - [12. Extra: Combinations, Permutations and Co.](#12-extra-combinations-permutations-and-co)
-  - [13. Extra: Python Tips \& Tricks](#13-extra-python-tips--tricks)
+  - [10. Extra: Subsets - Combinations, Permutations and Co.](#10-extra-subsets---combinations-permutations-and-co)
+  - [11. Extra: Python Tips \& Tricks](#11-extra-python-tips--tricks)
     - [Interesting Articles, Links](#interesting-articles-links)
     - [Python Tools](#python-tools)
     - [Testing](#testing)
     - [Tricks](#tricks)
-  - [11. Other Topics](#11-other-topics)
-    - [Salary Negotiation](#salary-negotiation)
-    - [Job Search Platforms](#job-search-platforms)
-    - [Typical Behavioral Questions](#typical-behavioral-questions)
-    - [Questions I Got Asked](#questions-i-got-asked)
+    - [12. Extra: Writing Efficient Python Code](#12-extra-writing-efficient-python-code)
+  - [13. Design Patterns](#13-design-patterns)
 
 ## 1. Algorithm Analysis and Big O
 
@@ -1323,26 +1323,46 @@ class Node:
   - Problem: Given the root of a binary search tree and 2 numbers min and max, trim the tree such that all the numbers in the new tree are between min and max (inclusive). The resulting tree should still be a valid binary search tree.
   - Solution
 
+### Extra: Tries
 
+Educative.
+
+:construction:
+
+TBD.
 
 ## 7. Searching and Sorting
 
+:construction:
+
+TBD.
+
 ## 8. Graph Algorithms
+
+:construction:
+
+TBD.
 
 ## 9. Riddles
 
-## 10. Extra: Tries
+:construction:
 
-## 11. Extra: Hash Tables
+TBD.
 
-## 12. Extra: Combinations, Permutations and Co.
+## 10. Extra: Subsets - Combinations, Permutations and Co.
 
-## 13. Extra: Python Tips & Tricks
+Educative.
+
+:construction:
+
+TBD.
+
+## 11. Extra: Python Tips & Tricks
 
 ### Interesting Articles, Links
 
 - [12 Python Features Every Data Scientist Should Know](https://medium.com/bitgrit-data-science-publication/12-python-features-every-data-scientist-should-know-1d233dbaab0c)
--[10 Python Anti-Patterns You Must Avoid When Writing Clean Code](https://medium.com/python-in-plain-english/10-python-anti-patterns-you-must-avoid-when-writing-clean-code-ff3635ca1510)
+- [10 Python Anti-Patterns You Must Avoid When Writing Clean Code](https://medium.com/python-in-plain-english/10-python-anti-patterns-you-must-avoid-when-writing-clean-code-ff3635ca1510)
 
 ### Python Tools
 
@@ -1619,82 +1639,28 @@ source_code = inspect.getsource(MyClass)
 print(source_code)
 ```
 
-## 11. Other Topics
+### 12. Extra: Writing Efficient Python Code
 
-### Salary Negotiation
+DataCamp course [Writing Efficient Python Code](https://app.datacamp.com/learn/courses/writing-efficient-python-code):
 
-- Wait the topic to be raised?
-- Know your market value.
-  - Check company salaries: [https://www.glassdoor.com](https://www.glassdoor.com).
-- It is often said the it's better to let the company to make the first move. I don't know if that's true.
-- Strategies for every 2-party negotiation:
-  - There are 2 ranges: *my* [min, max] and *their* [min, max]
-    - My min: the minimum amount I am ready to accept, the lowest I am ready to go
-    - My max: the amount I would like to get
-    - Their min: the amount they would like to pay
-    - Their max: maximum they are ready to pay, the highest they are ready to go
-  - A negotiation can be viewed as discovering *their* range and setting the discussion in their max.
-  - When amounts are mentioned
-    - They usually mention *their* min
-    - We usually mention *our* max, or we star bluffing above our max
-    - (Assume they know all these 2 points!)
-  - Strategy:
-    - Discover *their* **real** max as soon as possible.
-    - Place the negotiation around that max.
-    - Try not to reveal our entire range.
-    - If we bluff (we mention a max larger than our **real** max and outside from their range) the negotiation could stop because they understand our max is too much; alternatively, we need to decrease our mentioned max.
-- Interesting lecture: [How to Negotiate Your Job Offer - Prof. Deepak Malhotra (Harvard Business School)](https://www.youtube.com/watch?v=km2Hd_xgo9Q)
+- Foundations for efficiencies
+  - `range()`, `enumerate()`, `map()`
+  - Numpy arrays
+- Timing and profiling code
+  - `%timeit`
+  - `%lprun`
+  - `%mprun`
+- Gaining efficiencies
+  - Permutations, combinations
+  - Optimizing and or eliminating loops
+- Basic pandas optimizations
+  - `.iterrows()`
+  - `.itertuples()`
+  - `.apply()`
+  - `.iloc`
 
-### Job Search Platforms
+See [`Efficient_Python/`](./Efficient_Python/).
 
-Job postings:
+## 13. Design Patterns
 
-- [https://angel.co](https://angel.co)
-- [http://www.simplyhired.com](http://www.simplyhired.com)
-- [https://www.glassdoor.com](https://www.glassdoor.com)
-- [https://www.linkedin.com/](https://www.linkedin.com/)
-- [http://www.indeed.com/](http://www.indeed.com/)
-
-Matching:
-
-- [https://hired.com/](https://hired.com/)
-- [https://www.whitetruffle.com/](https://www.whitetruffle.com/)
-- [http://www.indeed.com](http://www.indeed.com)
-- [https://otta.com/](https://otta.com/)
-
-### Typical Behavioral Questions
-
-- Tell me about yourself
-  - Brief history + accomplishments.
-  - Be able to extend on any items on the CV, e.g., projects, etc.
-- Why are you leaving your current position
-  - Be honest and positive, show what we want.
-  - Tell about our ambition, goals, growing, responsibilities; recall: the match needs to be mutual!
-- Why do you want this position?
-  - Show your passion.
-  - Be confident.
-- Where do you see yourself in 5 years?
-  - Show your plan.
-- What's you greatest weakness?
-  - Turn question around and show areas that need improvement.
-  - Also, talk about how you've improved your weaknesses.
-  - Give real concrete examples.
-- What do you know about our company?
-  - Do your research beforehand!
-  - If the company's culture is public, read and learn it.
-- What's the most difficult situation you had to face at a job?
-  - Focus on the solution to the situation.
-  - What did I learn?
-- What do you think makes a successful manager?
-  - Show your management style and philosophy; remember: match needs to be mutual.
-  - Teamwork, leading by example.
-- How many positions have you applied for?
-
-### Questions I Got Asked
-
-- If you could take 2 people from your past jobs for your new role, who would they be? Describe them.
-- What's the thing you're most proud of?
-- Which are the 3 most important things you're looking for in your new role?
-- In which situation/role would you like to be in 5 years?
-- If you start this new role, which are the first things you'd do?
-- Can you implement X from scratch?
+See [mxagar/design_patterns_notes](https://github.com/mxagar/design_patterns_notes).
