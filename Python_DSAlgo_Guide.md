@@ -44,6 +44,7 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [5. Recursion](#5-recursion)
     - [Recursion Basics](#recursion-basics)
     - [Memoization and Dynamic Programming](#memoization-and-dynamic-programming)
+    - [Least Recently Used Cache: `lru_cache`](#least-recently-used-cache-lru_cache)
     - [Recursion Exercises](#recursion-exercises)
   - [6. Trees](#6-trees)
     - [Basics and Implementation](#basics-and-implementation)
@@ -64,7 +65,7 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
   - [9. Riddles and Brain Teasers](#9-riddles-and-brain-teasers)
-  - [](#)
+    - [Examples, Exercises](#examples-exercises)
   - [10. Extra: Subsets - Combinations, Permutations and Co.](#10-extra-subsets---combinations-permutations-and-co)
     - [Permutations](#permutations)
     - [Combinations (without Replacement)](#combinations-without-replacement)
@@ -371,7 +372,7 @@ class Deque:
   - We need to locate the node by traversing the list: we already know where the `head` and `tail` are.
   - We create new node.
   - We update the references of the new node and the one before it.
-- Access to the element `k` is `O(k)` bevcause we need to traverse the list from the tail, but insertion/deletion once we found it is `O(1)`.
+- Access to the element `k` is `O(k)` because we need to traverse the list from the tail, but insertion/deletion once we found it is `O(1)`.
 - IMPORTANT: we only have the reference to the next node, not the previous! That makes necessary traversals in some cases. A doubly linked list solves that by keeping two references per node: the one to the next and the one to the previous.
 
 Example of singly linked list which contains airport codes/names:
@@ -553,6 +554,27 @@ factorial_1(20)
 # 187 ns
 %%timeit
 factorial_2(20)
+```
+
+### Least Recently Used Cache: `lru_cache`
+
+Python has a built-in memoization decorator: `lru_cache`!
+
+The cache discards the least recently used items first when the cache limit is reached. We can set the maximum size of the cache to limit memory usage.
+
+```python
+from functools import lru_cache
+
+# The cache discards the least recently used items first when the cache limit is reached. 
+# We can set the maximum size of the cache to limit memory usage.
+# maxsize=None allows the cache to grow without bound
+@lru_cache(maxsize=None)
+def fibonacci(n):
+    if n < 2:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+
+print(fibonacci(10))  # Outputs: 55
 ```
 
 ### Recursion Exercises
@@ -1362,7 +1384,30 @@ Tips:
 - Try to map the problem to a fundamental data structure.
 - If we get stuck, try to solve it for a small number of items first, then generalize.
 
-##
+### Examples, Exercises
+
+- [`Bridge Crossing - SOLUTION.ipynb`](./Riddles/Riddle%20Interview%20Problems/Riddle%20Interview%20Problems%20-%20SOLUTIONS/Bridge%20Crossing%20-%20SOLUTION.ipynb):
+  - Problem: a group of 4 people with different walking speeds need to cross a bridge with a torch that only can hold the weight of two people; which is the fastest time they can accomplish?
+  - Solution: a careful plan is drafted; maybe we could generate all combinations and pick the optimum?
+- [`Coins and a Scale - SOLUTION.ipynb`](./Riddles/Riddle%20Interview%20Problems/Riddle%20Interview%20Problems%20-%20SOLUTIONS/Coins%20and%20a%20Scale%20-%20SOLUTION.ipynb):
+  - Problem: find the heaviest coin in a group of 8 coins using a 2-pan scale.
+  - Solution: create 2 groups, i.e., 2 groups of 3 and one of 2, then start using the scale. The key is creating 3 groups, not 2!
+- [`Egg Drop - SOLUTION.ipynb`](./Riddles/Riddle%20Interview%20Problems/Riddle%20Interview%20Problems%20-%20SOLUTIONS/Egg%20Drop%20-%20SOLUTION.ipynb)
+  - Problem: Given 2 eggs, discover the highest floor possible they can be thrown from without breaking. The highest floor is 100.
+  - Solution: Start dropping the egg every 10th floor, when it breaks, use second to determine the unit; worst-case: 19 drops. Alternative: use binary search.
+- [`Hallway Lockers - SOLUTION.ipynb`](./Riddles/Riddle%20Interview%20Problems/Riddle%20Interview%20Problems%20-%20SOLUTIONS/Hallway%20Lockers%20-SOLUTION.ipynb)
+  - Problem: We go through a hall way with 100 lockers and toggle (open/close) the (n+1)th lockers in each nth pass. How many lockers remain open after 100 passes.
+  - Solution: Select a small number of lockers (e.g., 12), perform n passes and see which patterns emerge. Then generalize. It turns out only perfect square numbers remain open.
+- [`Jugs of Water - SOLUTION.ipynb`](./Riddles/Riddle%20Interview%20Problems/Riddle%20Interview%20Problems%20-%20SOLUTIONS/Jugs%20of%20Water%20-%20SOLUTION.ipynb)
+  - Problem:
+    > You have a five gallons jug and a three gallons jug, and an unlimited supply of water (but no measuring cups) How would you come up with exactly four gallons of water?
+  - Solution: We combine both jugs to find the strategy; key idea: when one is partially filled, we can fill it with the other, simulating a subtraction operation. Since we are asked for 4 gallons, the jug with the 5 gallons should be part of the solution.
+- [`Light Switches - SOLUTION.ipynb`](./Riddles/Riddle%20Interview%20Problems/Riddle%20Interview%20Problems%20-%20SOLUTIONS/Light%20Switches%20-%20SOLUTION.ipynb)
+  - Problem: Three incandescent lights inside a room can be switched on with three switches outside of the room. Guess which switch belongs to each bulb.
+  - Solution: Use the fact that incandescent bulbs get hot.
+- [`Ropes Burning - SOLUTION.ipynb`](./Riddles/Riddle%20Interview%20Problems/Riddle%20Interview%20Problems%20-%20SOLUTIONS/Ropes%20Burning%20-%20SOLUTION.ipynb)
+  - Problem: Three ropes of different material and burning rate take exactly 60 minutes to burn, but each burns inconsistently. Measure 45 minutes.
+  - Solution: We can light the two ends of a rope, and one of another. When the first finishes, we light the second end of the second rope which is burning.
 
 ## 10. Extra: Subsets - Combinations, Permutations and Co.
 
