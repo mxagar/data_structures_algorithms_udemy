@@ -63,14 +63,20 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
     - [Extra: Tries](#extra-tries)
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
-  - [9. Riddles](#9-riddles)
+  - [9. Riddles and Brain Teasers](#9-riddles-and-brain-teasers)
+  - [](#)
   - [10. Extra: Subsets - Combinations, Permutations and Co.](#10-extra-subsets---combinations-permutations-and-co)
+    - [Permutations](#permutations)
+    - [Combinations (without Replacement)](#combinations-without-replacement)
+    - [Combinations with Replacement](#combinations-with-replacement)
+    - [Python Implementations](#python-implementations)
+    - [Example: Largest Palindromic Number](#example-largest-palindromic-number)
   - [11. Extra: Python Tips \& Tricks](#11-extra-python-tips--tricks)
     - [Interesting Articles, Links](#interesting-articles-links)
     - [Python Tools](#python-tools)
     - [Testing](#testing)
     - [Tricks](#tricks)
-    - [12. Extra: Writing Efficient Python Code](#12-extra-writing-efficient-python-code)
+  - [12. Extra: Writing Efficient Python Code](#12-extra-writing-efficient-python-code)
   - [13. Design Patterns](#13-design-patterns)
 
 ## 1. Algorithm Analysis and Big O
@@ -1325,11 +1331,9 @@ class Node:
 
 ### Extra: Tries
 
-Educative.
+Source: [Educative: Ace the Python Coding Interview](https://www.educative.io/path/ace-python-coding-interview)
 
-:construction:
 
-TBD.
 
 ## 7. Searching and Sorting
 
@@ -1343,19 +1347,294 @@ TBD.
 
 TBD.
 
-## 9. Riddles
+## 9. Riddles and Brain Teasers
 
-:construction:
+Types of riddles:
 
-TBD.
+- Trick questions
+- Estimation problems
+- Math puzzles
+
+Most of the companies have banned them.
+
+Tips:
+
+- Try to map the problem to a fundamental data structure.
+- If we get stuck, try to solve it for a small number of items first, then generalize.
+
+##
 
 ## 10. Extra: Subsets - Combinations, Permutations and Co.
 
-Educative.
+Sources:
 
-:construction:
+- [Easy Permutations and Combinations](https://betterexplained.com/articles/easy-permutations-and-combinations/)
+- [Permutation and Combination in Python](https://www.geeksforgeeks.org/permutation-and-combination-in-python/)
 
-TBD.
+Permutations and combinations create subsets from a larger set of objects; their difference, in short:
+
+- Permutations are for lists: order matters.
+- Combinations are for groups: order doesn't matter.
+
+**A common strategy is to generate all possible subsets from a larger set and then filter the cases according to some rules.**
+
+### Permutations
+
+Permutations count **all possible ways** of doing something; order matters.
+
+Example:
+
+> We have 8 people. How many ways can we award a 1st, 2nd and 3rd place prize among eight contestants? (Gold / Silver / Bronze)
+
+```
+1: [A]lice
+2: [B]ob
+3: [C]harlie
+4: [D]avid
+5: [E]ve
+6: [F]rank
+7: [G]eorge
+8: [H]oratio
+```
+
+Answer:
+
+```
+P(n, k) = n! / (n - k)!
+P(n=8, k=3) = 8!/5! = 8 * 7 * 6 = 336
+```
+
+Where:
+
+- `n`: total number in large set
+- `k`: size of subsets
+
+![Permutation](./assets/permutation.png)
+
+Further examples:
+
+- Picking a President, VP and Waterboy from a group of 10.
+
+### Combinations (without Replacement)
+
+Combinations count **all possible unordered subgroups**; order *does not* matter. **Important: this section is about combinations _without_ replacement**
+
+Example:
+
+> We have 8 people. The top 3 are selected independently of score and each one receives the same T-Shirt as present. How many ways can I give 3 T-Shirts to 8 people?
+
+```
+1: [A]lice
+2: [B]ob
+3: [C]harlie
+4: [D]avid
+5: [E]ve
+6: [F]rank
+7: [G]eorge
+8: [H]oratio
+```
+
+Answer:
+
+```
+C(n, k) = P(n, k) / k! = n! / (k!(n - k)!)
+C(n=8, k=3) = 8!/(3!5!) = 8 * 7 * 6 / (3 * 2 * 1) = 336 / 6 = 56
+```
+
+Where:
+
+- `n`: total number in large set
+- `k`: size of subsets
+
+![Combination](./assets/combination.png)
+
+**Important: C(n,k) is the [binomial coefficient](https://en.wikipedia.org/wiki/Binomial_coefficient)**
+
+Further examples:
+
+- Picking a team of 3 people from a group of 10.
+- Choosing 3 desserts from a menu of 10.
+
+### Combinations with Replacement
+
+Example:
+
+> There are five kinds of frozen yogurt: banana, chocolate, lemon, strawberry and vanilla. You can have three scoops. What number of varieties will there be?
+
+```
+C_R(n, k) = C(n+k-1, k) = (n+k-1)! / (k!(n - 1)!)
+C_R(n=5, k=3) = C(n+k-1=5+3-1, k=3) = 7! / (3!*4!) = 7 * 6 * 5 / (3 * 2 * 1) = 35
+```
+
+
+### Python Implementations
+
+The `itertools` module has these functions which not only count but generate the subgroups:
+
+- `permutations`: `P(n, k) = n! / (n - k)!`
+- `combinations`: `C(n, k) = P(n, k) / k! = n! / (k!(n - k)!)`
+- `combinations_with_replacement`: `C(n+k-1, k) = (n+k-1)! / (k!(n - 1)!)`
+
+```python
+# A Python program to print all 
+# permutations using library function 
+from itertools import (
+    permutations,
+    combinations,
+    combinations_with_replacement
+)
+
+ 
+# Get all permutations of [1, 2, 3]
+# n = 3, k = 0
+perm = permutations([1, 2, 3]) 
+ 
+# Print the obtained permutations
+# Complexity: O(n!), because there are n! 
+for i in list(perm): 
+    print(i)
+    # (1, 2, 3)
+    # (1, 3, 2)
+    # (2, 1, 3)
+    # (2, 3, 1)
+    # (3, 1, 2)
+    # (3, 2, 1)
+
+# Get all permutations of length 2
+# n = 3, k = 2
+# Complexity: O(n^k)
+perm = permutations([1, 2, 3], 2) 
+ 
+# Print the obtained permutations 
+for i in list(perm): 
+    print(i)
+    # (1, 2)
+    # (1, 3)
+    # (2, 1)
+    # (2, 3)
+    # (3, 1)
+    # (3, 2)
+
+# Get all combinations of [1, 2, 3]
+# and length 2
+# n = 3, k = 2
+# Elements are treated as unique based on their position, 
+# not on their value
+comb = combinations([1, 2, 3], 2)
+ 
+# Print the obtained combinations
+for i in list(comb):
+    print(i)
+    # (1, 2)
+    # (1, 3)
+    # (2, 3)
+
+# Get all combinations of [1, 2, 3]
+# and length 2, but with REPLACEMENT
+comb = combinations_with_replacement([1, 2, 3], 2) 
+ 
+# Print the obtained combinations 
+for i in list(comb): 
+    print(i)
+    # (1, 1)
+    # (1, 2)
+    # (1, 3)
+    # (2, 2)
+    # (2, 3)
+    # (3, 3) 
+```
+
+### Example: Largest Palindromic Number
+
+You are given a string `S` consisting entirely of decimal digits (0–9). Your task is to form the largest possible palindromic number using the digits from `S`. You must use at least one digit, and you can rearrange the digits in any order.
+
+**Definition:**
+
+A palindromic number is a number that reads the same forwards and backwards. For example, "7", "44", and "83238" are palindromic numbers.
+
+**Constraints:**
+
+- The palindromic number should not have any leading zeros (e.g., "0990" or "010").
+- The length of `S` (denoted as `N`) is between 1 and 100,000.
+- The string `S` contains only digits from 0 to 9.
+
+**Examples:**
+
+1. Given `S = "39878"`, the function should return `"898"`.
+2. Given `S = "00900"`, the function should return `"9"`.
+3. Given `S = "0000"`, the function should return `"0"`.
+4. Given `S = "54321"`, the function should return `"5"`.
+
+**Instructions:**
+
+Write a function:
+
+```python
+def solution(S):
+```
+
+This function should take a string `S` and return a string representing the largest possible palindromic number that can be created from the digits in `S`.
+
+**Edge Cases:**
+
+- If all characters are zeros, the result should be `"0"`.
+- Single digit strings should return the digit itself.
+
+**Example Walkthrough:**
+
+For `S = "8199"`, the possible palindromic numbers are "1", "8", "9", "99", "919", and "989". Among these, "989" is the largest.
+
+**Solution:**
+
+The following solution  generates all possible combinations and permutations of the digits, then checks each one to see if it is a valid palindrome without leading zeros. While this method is correct in theory, it is highly inefficient, especially given the constraints (up to 100,000 digits). Generating all permutations and combinations results in factorial time complexity, which is impractical for large inputs.
+
+```python
+from itertools import combinations, permutations
+
+def is_palindrome(s):
+    return s == s[::-1]
+
+def solution(S):
+    valid_palindromes = []
+
+    # Generate all possible combinations of all lengths
+    for r in range(1, len(S) + 1):
+        for comb in combinations(S, r):
+            # For each combination, generate all possible permutations
+            for perm in permutations(comb):
+                perm_str = "".join(perm)
+                
+                # Check if it's a palindrome and doesn't have leading zeros (except "0")
+                if (perm_str[0] != '0' or perm_str == '0') and is_palindrome(perm_str):
+                    valid_palindromes.append(perm_str)
+
+    # Return the palindrome with the largest decimal value
+    return max(valid_palindromes, key=int, default='0')
+
+print(solution("39878")) # 898
+print(solution("00900")) # 9
+print(solution("0000")) # 0
+print(solution("54321")) # 5
+
+# Test functions
+def test_solution():
+    assert solution("39878") == "898"
+    assert solution("00900") == "9"
+    assert solution("0000") == "0"
+    assert solution("54321") == "5"
+    print("All tests passed!")
+
+test_solution()
+
+```
+
+**Steps for a more efficient solution:**
+
+1. Count the Frequency of Each Digit: Use a frequency counter to count how many times each digit appears in the string.
+2. Form Half of the Palindrome: Collect the digits in descending order to form the first half of the palindrome.
+3. Handle the Middle Digit: If any digit has an odd frequency, select the largest one as the middle digit.
+4. Create the Full Palindrome: Mirror the first half to create the second half of the palindrome, inserting the middle digit if necessary.
+
 
 ## 11. Extra: Python Tips & Tricks
 
@@ -1639,7 +1918,7 @@ source_code = inspect.getsource(MyClass)
 print(source_code)
 ```
 
-### 12. Extra: Writing Efficient Python Code
+## 12. Extra: Writing Efficient Python Code
 
 DataCamp course [Writing Efficient Python Code](https://app.datacamp.com/learn/courses/writing-efficient-python-code):
 
