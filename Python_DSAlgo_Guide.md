@@ -61,11 +61,17 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
       - [Delete a node](#delete-a-node)
       - [BST implementation code](#bst-implementation-code)
     - [Tree Exercises](#tree-exercises)
-    - [Extra: Tries](#extra-tries)
+    - [Extra: Tries, aka. Prefix Trees](#extra-tries-aka-prefix-trees)
+      - [Structure of a Trie](#structure-of-a-trie)
+      - [Insertion in a Trie](#insertion-in-a-trie)
+      - [Search in a Trie](#search-in-a-trie)
+      - [Deletion in a Trie](#deletion-in-a-trie)
+      - [Full Trie Implementation](#full-trie-implementation)
+      - [Examples, Exercises](#examples-exercises)
   - [7. Searching and Sorting](#7-searching-and-sorting)
   - [8. Graph Algorithms](#8-graph-algorithms)
   - [9. Riddles and Brain Teasers](#9-riddles-and-brain-teasers)
-    - [Examples, Exercises](#examples-exercises)
+    - [Examples, Exercises](#examples-exercises-1)
   - [10. Extra: Subsets - Combinations, Permutations and Co.](#10-extra-subsets---combinations-permutations-and-co)
     - [Permutations](#permutations)
     - [Combinations (without Replacement)](#combinations-without-replacement)
@@ -1346,16 +1352,181 @@ class Node:
   - Solution: BST property is checked: given a node, its value must be between the values of the left and right children. The property is checked with recursive calls given a node.
 - [`Tree Level Order Print - SOLUTION.ipynb`](./Trees/Trees%20Interview%20Problems%20-%20SOLUTIONS/Tree%20Level%20Order%20Print%20-%20SOLUTION.ipynb)
   - Problem: Given a binary tree of integers, print it in level order. The output will contain space between the numbers in the same level, and new line between different levels.
-  - Solution: a FIFO queue (a list, basically) is filled with root node; then, we perform `pop(0)` from it, print the node's key and and `append()` its children in a while loo
+  - Solution: a FIFO queue (a list, basically) is filled with root node; then, we perform `pop(0)` from it, print the node's key and and `append()` its children in a while loop. This is a breadth-first traverse, like in the hierarchical VPS.
 - [`Trim a Binary Search Tree - SOLUTION.ipynb`](./Trees/Trees%20Interview%20Problems%20-%20SOLUTIONS/Trim%20a%20Binary%20Search%20Tree%20-%20SOLUTION.ipynb)
   - Problem: Given the root of a binary search tree and 2 numbers min and max, trim the tree such that all the numbers in the new tree are between min and max (inclusive). The resulting tree should still be a valid binary search tree.
-  - Solution
+  - Solution: Post-order traversal (left, right, current) is performed checking the BST property in a recursive call. We visit worst-case all the nodes, so complexity is `O(n)`
 
-### Extra: Tries
+### Extra: Tries, aka. Prefix Trees
 
-Source: [Educative: Ace the Python Coding Interview](https://www.educative.io/path/ace-python-coding-interview)
+Source: [Educative: Ace the Python Coding Interview](https://www.educative.io/path/ace-python-coding-interview); i.e., not the Udemy course.
+
+Extra Folder: [`Trees/Tries/`](./Trees/Tries/).
+
+Tries aka. Prefix Trees are derived from *retrieval* and are very efficient with strings. Typical applications:
+
+- Dictionary word searches
+- Search engine auto-suggestions: auto-completion, spell checking
+- IP routing
+
+Properties of a Trie:
+
+- Similar to graphs: each node is a letter.
+- Each node can point to `None` or other children nodes.
+- The size is the number of symbols/characters; e.g., in English: 26.
+- Depth: longest word it stores.
+- The words are stored top-bottom; the last character has a flag `is_end_word = True`.
+- It provides the same path for words with the same prefix: `there, their, the`. This is key.
+
+#### Structure of a Trie
+
+![Structure of a Trie: top, thus, their](./assets/trie_structure.png)
+
+A **Trie node**:
+
+```python
+class TrieNode:
+    def __init__(self, char=''):
+        # To store the value of a particular key
+        self.char = char
+        # This will store pointers to the children; size of alphabet
+        self.children = [None] * 26
+        # True if the node represents the end of word, i.e., leaf node
+        self.is_end_word = False
+
+trie_node = TrieNode('a')
+print(trie_node.char)
+```
+
+The **Trie class**:
+
+```python
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()  # Root node
+
+    # Function to insert a key in the Trie
+    def insert(self, key):
+        pass
+
+    # Function to search a given key in Trie
+    def search(self, key):
+        return False
+
+    # Function to delete given key from Trie
+    def delete(self, key):
+        pass
+
+```
+
+#### Insertion in a Trie
+
+Insertion is in general as follows:
+
+- for each key/letter, we check that it exists in the position it belongs to,
+- if not present, we create a child/Trie node,
+- if it is the last, we set `is_end_word = True`.
+
+There are 3 cases:
+
+1. No common prefix
+2. Common prefix
+3. Word exists
+
+**No common prefix**
+
+If we have a Trie with the word `t,h,e` in it and we want to insert `a,n,y`, we need to create a complete new branch, because no common prefix exists in the tree.
+
+All the letters of the new word are inserted one by one.
+
+For both `the` and `any`, their last letter is `end_of_word = True`.
+
+![Trie: Insert with no common prefix](./assets/trie_insert_1.png)
+
+**Common prefix**
+
+Another case: we have the word `t,h,e,i,r` in the tree and we'd like to insert `t,h,e,r,e`. We traverse the trie until the first `e` and create a new branch to add `r,e`.
+
+![Trie: Insert with common prefix](./assets/trie_insert_2.png)
+
+![Trie: Insert with common prefix](./assets/trie_insert_3.png)
+
+**Word exists**
+
+If the word exists in the trie or it is a substring of a word in the trie, we set `end_of_word = True` in the appropriate letter, even it is not a leaf.
+
+Example: we have the word `t,h,e,i,r` and want to insert `t,h,e`; we go one by one through the *new* set of letters and check the path exists, when the last letter is visited, its node is set to be `end_of_word = True` if it is not already.
+
+![Trie: word as substring](./assets/trie_insert_4.png)
+
+**Insert Method**
+
+```python
+from TrieNode import TrieNode
 
 
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()  # Root node
+
+    # Function to get the index of character 't'
+    def get_index(self, t):
+        return ord(t) - ord('a')
+
+    # Function to insert a key in the Trie
+    def insert(self, key):
+        if key is None:
+            return False  # None key
+
+        key = key.lower()  # Keys are stored in lowercase
+        current = self.root
+
+        # Iterate over each letter in the key
+        # If the letter exists, go down a level
+        # Else simply create a TrieNode and go down a level
+        for letter in key:
+            index = self.get_index(letter)
+
+            if current.children[index] is None:
+                current.children[index] = TrieNode(letter)
+                print(letter, "inserted")
+
+            current = current.children[index]
+
+        current.is_end_word = True
+        print("'" + key + "' inserted")
+
+    # Function to search a given key in Trie
+    def search(self, key):
+        return False
+
+    # Function to delete given key from Trie
+    def delete(self, key):
+        pass
+
+
+# Input keys (use only 'a' through 'z')
+keys = ["the", "a", "there", "answer", "any",
+        "by", "bye", "their", "abc"]
+
+t = Trie()
+print("Keys to insert:\n", keys)
+
+# Construct Trie
+for words in keys:
+    t.insert(words)
+```
+
+#### Search in a Trie
+
+#### Deletion in a Trie
+
+#### Full Trie Implementation
+
+#### Examples, Exercises
+
+- []().
+- []().
 
 ## 7. Searching and Sorting
 
