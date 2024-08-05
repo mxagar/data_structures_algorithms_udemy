@@ -1837,7 +1837,22 @@ print("abc --- " + res[1] if t.search("abc") else "abc --- " + res[0])
 
 #### Full Trie Implementation
 
+File: [`Trees/Tries/Tries - Problems - SOLUTIONS/trie.py`](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/trie.py)
+
 ```python
+"""This module contains the implementation
+of a Trie data structure for English words.
+"""
+
+class TrieNode:
+    def __init__(self, char=''):
+        # To store the value of a particular key
+        self.char = char
+        # This will store pointers to the children; size of alphabet
+        self.children = [None] * 26
+        # True if the node represents the end of word, i.e., leaf node
+        self.is_end_word = False
+
 class Trie:
     def __init__(self):
         self.root = TrieNode()  # Root node
@@ -1862,12 +1877,10 @@ class Trie:
 
             if current.children[index] is None:
                 current.children[index] = TrieNode(letter)
-                print(letter, "inserted")
 
             current = current.children[index]
 
         current.is_end_word = True
-        print("'" + key + "' inserted")
 
     # Function to search a given key in Trie
     def search(self, key):
@@ -1903,7 +1916,6 @@ class Trie:
         deleted_self = False
 
         if current is None:
-            print("Key does not exist")
             return deleted_self
 
         # Base Case:
@@ -1913,49 +1925,39 @@ class Trie:
         if level == length:
             # If there are no nodes ahead of this node in
             # this path, then we can delete this node
-            print("Level is length, we are at the end")
             if current.children.count(None) == len(current.children):
-                print("- Node", current.char, ": has no children, delete it")
                 current = None
                 deleted_self = True
 
             # If there are nodes ahead of current in this path
             # Then we cannot delete current. We simply unmark this as leaf
             else:
-                print("- Node", current.char, ": has children, don't delete \
-                it")
                 current.is_end_word = False
                 deleted_self = False
 
         else:
             index = self.get_index(key[level])
-            print("Traverse to", key[level])
             child_node = current.children[index]
             child_deleted = self.delete_helper(
                 key, child_node, length, level + 1)
             # print( "Returned from", key[level] , "as",  child_deleted)
             if child_deleted:
                 # Setting children pointer to None as child is deleted
-                print("- Delete link from", current.char, "to", key[level])
                 current.children[index] = None
                 # If current is a leaf node then
                 # current is part of another key
                 # So, we cannot delete this node and it's parent path nodes
                 if current.is_end_word:
-                    print("- - Don't delete node", current.char, ": word end")
                     deleted_self = False
 
                 # If child_node is deleted and current has more children
                 # then current must be part of another key
                 # So, we cannot delete current Node
                 elif current.children.count(None) != len(current.children):
-                    print("- - Don't delete node", current.char, ": has \
-                    children")
                     deleted_self = False
 
                 # Else we can delete current
                 else:
-                    print("- - Delete node", current.char, ": has no children")
                     current = None
                     deleted_self = True
 
@@ -1969,40 +1971,25 @@ class Trie:
     # Trivial cases handled and recursive function delete_helper called
     def delete(self, key):
         if self.root is None or key is None:
-            print("None key or empty trie error")
             return
-        print("\nDeleting:", key)
         self.delete_helper(key, self.root, len(key), 0)
 
-
-# Input keys (use only 'a' through 'z')
-keys = ["the", "a", "there", "answer", "any",
-        "by", "bye", "their", "abc"]
-res = ["Not present in trie", "Present in trie"]
-
-t = Trie()
-print("Keys to insert: \n", keys)
-
-# Construct Trie
-for words in keys:
-    t.insert(words)
-
-# Search for different keys
-print("the --- " + res[1] if t.search("the") else "the --- " + res[0])
-print("these --- " + res[1] if t.search("these") else "these --- " + res[0])
-print("abc --- " + res[1] if t.search("abc") else "abc --- " + res[0])
-
-# Delete abc
-t.delete("abc")
-print("Deleted key \"abc\" \n")
-
-print("abc --- " + res[1] if t.search("abc") else "abc --- " + res[0])
 ```
 
 #### Examples, Exercises
 
-- []().
-- []().
+- [Trees/Tries/Tries - Problems - SOLUTIONS/01_Trie_Total_Number_Words.ipynb](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/01_Trie_Total_Number_Words.ipynb):
+  - Problem: Given a Trie with several words in it, count them.
+  - Solution: The number of words in a tree amounts to the number of leafs in it, i.e., we need to count the number of nodes with `end_of_word = True`. We can create a recursive function which increases counter if a leaf node is found and calls itself if node children exist.
+- [Trees/Tries/Tries - Problems - SOLUTIONS/02_Trie_All_Words.ipynb](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/02_Trie_All_Words.ipynb):
+  - Problem: 
+  - Solution:
+- [Trees/Tries/Tries - Problems - SOLUTIONS/03_Trie_List_Sort.ipynb](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/03_Trie_List_Sort.ipynb):
+  - Problem:
+  - Solution:
+- [Trees/Tries/Tries - Problems - SOLUTIONS/04_Trie_Word_Formation.ipynb](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/04_Trie_Word_Formation.ipynb):
+  - Problem:
+  - Solution:
 
 ## 7. Searching and Sorting
 
