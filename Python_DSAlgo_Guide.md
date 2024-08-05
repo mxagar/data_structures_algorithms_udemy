@@ -1375,7 +1375,7 @@ Properties of a Trie:
 - Each node can point to `None` or other children nodes.
 - The size is the number of symbols/characters; e.g., in English: 26.
 - Depth: longest word it stores.
-- The words are stored top-bottom; the last character has a flag `is_end_word = True`.
+- The words are stored top-bottom; the last character has a flag `is_end_word = True`, i.e., leaf node.
 - It provides the same path for words with the same prefix: `there, their, the`. This is key.
 
 #### Structure of a Trie
@@ -1419,6 +1419,14 @@ class Trie:
 
 ```
 
+In all cases
+
+- We have a `root` without a key/letter, from which all operations start.
+- Words are added/searched/deleted letter by letter.
+- We can have several `is_end_word = True` flags along a path.
+
+The complete class implementations can be found in [`Trees/Tries/Tries.ipynb`](./Trees/Tries/Tries.ipynb).
+
 #### Insertion in a Trie
 
 Insertion is in general as follows:
@@ -1426,6 +1434,8 @@ Insertion is in general as follows:
 - for each key/letter, we check that it exists in the position it belongs to,
 - if not present, we create a child/Trie node,
 - if it is the last, we set `is_end_word = True`.
+
+The letters are inserted/checked one by one, so if a word has `n` letters, the insertion complexity is `O(n)`.
 
 There are 3 cases:
 
@@ -1462,18 +1472,19 @@ Example: we have the word `t,h,e,i,r` and want to insert `t,h,e`; we go one by o
 **Insert Method**
 
 ```python
-from TrieNode import TrieNode
-
-
 class Trie:
     def __init__(self):
         self.root = TrieNode()  # Root node
 
     # Function to get the index of character 't'
+    # Alphabet ordinal indices: 0-25
     def get_index(self, t):
         return ord(t) - ord('a')
 
     # Function to insert a key in the Trie
+    # key = word; composed by letters
+    # For a word of n letters,
+    # O(n) since we need to make n iterations
     def insert(self, key):
         if key is None:
             return False  # None key
@@ -1518,6 +1529,109 @@ for words in keys:
 ```
 
 #### Search in a Trie
+
+> If we want to check whether a word is present in the trie or not, we just need to keep tracing the path in the trie corresponding to the characters/letters in the word.
+
+Again, we have 3 cases:
+
+1. No common prefix, non-existent word
+2. Common prefix, word exists as a substring
+3. Word exists
+
+Let's consider the case in which we have a trie with the word `b,e,d` in it; we want to search
+
+1. `bedroom`: not in it
+   - we reach `None` before reaching the last letter of the query word
+   - or, we reach `end_of_word = True` before reaching the last letter of the query word
+2. `be`: in it as a substring, but not found!
+   - we can track the path of the query word, but its last letter is not set as `end_of_word = True`; **thus, `be` will not be found!**
+3. `bed`: entirely in it; success!
+   - the query word letters are found one by one and the last letter is set to be `end_of_word = True` in the trie
+
+![Trie: Search](./assets/trie_search.png)
+
+Length of word `h` -> search complexity `O(h)`.
+
+Implementation:
+
+```python
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()  # Root node
+
+    # Function to get the index of character 't'
+    def get_index(self, t):
+        return ord(t) - ord('a')
+
+    # Function to insert a key in the Trie
+    def insert(self, key):
+        if key is None:
+            return False  # None key
+
+        key = key.lower()  # Keys are stored in lowercase
+        current = self.root
+
+        # Iterate over each letter in the key
+        # If the letter exists, go down a level
+        # Else simply create a TrieNode and go down a level
+        for letter in key:
+            index = self.get_index(letter)
+
+            if current.children[index] is None:
+                current.children[index] = TrieNode(letter)
+                print(letter, "inserted")
+
+            current = current.children[index]
+
+        current.is_end_word = True
+        print("'" + key + "' inserted")
+
+    # Function to search a given key in Trie
+    def search(self, key):
+        if key is None:
+            return False  # None key
+
+        key = key.lower()
+        current = self.root
+
+        # Iterate over each letter in the key
+        # If the letter doesn't exist, return False
+        # If the letter exists, go down a level
+        # We will return true only if we reach the leafNode (is_end_word = True)
+        # and have traversed the Trie based on the length of the key
+        for letter in key:
+            index = self.get_index(letter)
+            if current.children[index] is None:
+                return False
+            current = current.children[index]
+
+        if current is not None and current.is_end_word:
+            return True
+
+        return False
+
+    # Function to delete given key from Trie
+    def delete(self, key):
+        pass
+
+
+# Input keys (use only 'a' through 'z')
+keys = ["the", "a", "there", "answer", "any",
+        "by", "bye", "their", "abc"]
+res = ["Not present in trie", "Present in trie"]
+
+t = Trie()
+print("Keys to insert: \n", keys)
+
+# Construct Trie
+for words in keys:
+    t.insert(words)
+
+# Search for different keys
+print("the --- " + res[1] if t.search("the") else "the --- " + res[0])
+print("these --- " + res[1] if t.search("these") else "these --- " + res[0])
+print("abc --- " + res[1] if t.search("abc") else "abc --- " + res[0])
+```
 
 #### Deletion in a Trie
 
