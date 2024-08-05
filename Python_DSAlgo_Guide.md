@@ -1982,8 +1982,8 @@ class Trie:
   - Problem: Given a Trie with several words in it, count them.
   - Solution: The number of words in a tree amounts to the number of leafs in it, i.e., we need to count the number of nodes with `end_of_word = True`. We can create a recursive function which increases counter if a leaf node is found and calls itself if node children exist.
 - [Trees/Tries/Tries - Problems - SOLUTIONS/02_Trie_All_Words.ipynb](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/02_Trie_All_Words.ipynb):
-  - Problem: 
-  - Solution:
+  - Problem: Given a Trie with several words in it, print all the words.
+  - Solution: Depth-First Search is implemented recursively and using some helper functions (e.g., get maximum tree depth).
 - [Trees/Tries/Tries - Problems - SOLUTIONS/03_Trie_List_Sort.ipynb](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/03_Trie_List_Sort.ipynb):
   - Problem:
   - Solution:
