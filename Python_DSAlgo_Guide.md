@@ -1443,7 +1443,7 @@ There are 3 cases:
 2. Common prefix
 3. Word exists
 
-**No common prefix**
+**No common prefix:**
 
 If we have a Trie with the word `t,h,e` in it and we want to insert `a,n,y`, we need to create a complete new branch, because no common prefix exists in the tree.
 
@@ -1453,7 +1453,7 @@ For both `the` and `any`, their last letter is `end_of_word = True`.
 
 ![Trie: Insert with no common prefix](./assets/trie_insert_1.png)
 
-**Common prefix**
+**Common prefix:**
 
 Another case: we have the word `t,h,e,i,r` in the tree and we'd like to insert `t,h,e,r,e`. We traverse the trie until the first `e` and create a new branch to add `r,e`.
 
@@ -1461,7 +1461,7 @@ Another case: we have the word `t,h,e,i,r` in the tree and we'd like to insert `
 
 ![Trie: Insert with common prefix](./assets/trie_insert_3.png)
 
-**Word exists**
+**Word exists:**
 
 If the word exists in the trie or it is a substring of a word in the trie, we set `end_of_word = True` in the appropriate letter, even it is not a leaf.
 
@@ -1635,7 +1635,369 @@ print("abc --- " + res[1] if t.search("abc") else "abc --- " + res[0])
 
 #### Deletion in a Trie
 
+> While deleting a node, we need to make sure that the node that we are trying to delete does not have any further child branches. If there are no branches, then we can easily remove the node.
+
+The first condition to delete a word is that its search should return a positive answer; then, again, we have 3 case:
+
+1. Word with No Suffix or Prefix.
+2. Word is a Prefix.
+3. Word Has a Common Prefix.
+
+Length of word `h` -> delete complexity `O(h)`.
+
+**Word with No Suffix or Prefix:**
+
+If the word to be deleted is a single path with no suffixes of prefixes, **we can simply delete all the nodes in its path, starting from the leaf up to the root.**
+
+Example: we delete `bat`, which is a unique branch or a non-shared path.
+
+![Trie: Delete Word with No Suffix or Prefix](./assets/trie_delete_1.png)
+
+**Word is a Prefix:**
+
+If the word is a prefix, **we navigate to its leaf node and set `end_of_word = False`.**
+
+Example: we delete `the`, which is a prefix of `their`.
+
+![Trie: Word is a Prefix](./assets/trie_delete_2.png)
+
+**Word Has a Common Prefix:**
+
+If the word we want to delete has an ending branch/path only associated with it (i.e., no more children), but a prefix path shared with other words, the nodes of the ending non-shared path/branch are removed starting from the leaf node up to the node where the ending branch started.
+
+Example: we delete `their`, which has the prefix `the`, by deleting the nodes `r,i`.
+
+![Trie: Word Has a Common Prefix](./assets/trie_delete_3.png)
+
+![Trie: Word Has a Common Prefix](./assets/trie_delete_4.png)
+
+Implementation:
+
+```python
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()  # Root node
+
+    # Function to get the index of character 't'
+    def get_index(self, t):
+        return ord(t) - ord('a')
+
+    # Function to insert a key in the Trie
+    def insert(self, key):
+        if key is None:
+            return False  # None key
+
+        key = key.lower()  # Keys are stored in lowercase
+        current = self.root
+
+        # Iterate over each letter in the key
+        # If the letter exists, go down a level
+        # Else simply create a TrieNode and go down a level
+        for letter in key:
+            index = self.get_index(letter)
+
+            if current.children[index] is None:
+                current.children[index] = TrieNode(letter)
+                print(letter, "inserted")
+
+            current = current.children[index]
+
+        current.is_end_word = True
+        print("'" + key + "' inserted")
+
+    # Function to search a given key in Trie
+    def search(self, key):
+        if key is None:
+            return False  # None key
+
+        key = key.lower()
+        current = self.root
+
+        # Iterate over each letter in the key
+        # If the letter doesn't exist, return False
+        # If the letter exists, go down a level
+        # We will return true only if we reach the leafNode and
+        # have traversed the Trie based on the length of the key
+
+        for letter in key:
+            index = self.get_index(letter)
+            if current.children[index] is None:
+                return False
+            current = current.children[index]
+
+        if current is not None and current.is_end_word:
+            return True
+
+        return False
+
+    # Recursive function to delete given key
+    # key = word
+    # current = root in the beginning, a node in recursive calls
+    # length = len(key)
+    # level = 0, 1, ..., len(key) 
+    def delete_helper(self, key, current, length, level):
+        deleted_self = False
+
+        if current is None:
+            print("Key does not exist")
+            return deleted_self
+
+        # Base Case:
+        # We have reached at the node which points
+        # to the alphabet at the end of the key,
+        # i.e., when the algorithm reaches the last node of the key
+        if level == length:
+            # If there are no nodes ahead of this node in
+            # this path, then we can delete this node
+            print("Level is length, we are at the end")
+            if current.children.count(None) == len(current.children):
+                print("- Node", current.char, ": has no children, delete it")
+                current = None
+                deleted_self = True
+
+            # If there are nodes ahead of current in this path
+            # Then we cannot delete current. We simply unmark this as leaf
+            else:
+                print("- Node", current.char, ": has children, don't delete \
+                it")
+                current.is_end_word = False
+                deleted_self = False
+
+        else:
+            index = self.get_index(key[level])
+            print("Traverse to", key[level])
+            child_node = current.children[index]
+            child_deleted = self.delete_helper(
+                key, child_node, length, level + 1)
+            # print( "Returned from", key[level] , "as",  child_deleted)
+            if child_deleted:
+                # Setting children pointer to None as child is deleted
+                print("- Delete link from", current.char, "to", key[level])
+                current.children[index] = None
+                # If current is a leaf node then
+                # current is part of another key
+                # So, we cannot delete this node and it's parent path nodes
+                if current.is_end_word:
+                    print("- - Don't delete node", current.char, ": word end")
+                    deleted_self = False
+
+                # If child_node is deleted and current has more children
+                # then current must be part of another key
+                # So, we cannot delete current Node
+                elif current.children.count(None) != len(current.children):
+                    print("- - Don't delete node", current.char, ": has \
+                    children")
+                    deleted_self = False
+
+                # Else we can delete current
+                else:
+                    print("- - Delete node", current.char, ": has no children")
+                    current = None
+                    deleted_self = True
+
+            else:
+                deleted_self = False
+
+        return deleted_self
+
+    # Function to delete given key from Trie
+    # key = word
+    # Trivial cases handled and recursive function delete_helper called
+    def delete(self, key):
+        if self.root is None or key is None:
+            print("None key or empty trie error")
+            return
+        print("\nDeleting:", key)
+        self.delete_helper(key, self.root, len(key), 0)
+
+
+# Input keys (use only 'a' through 'z')
+keys = ["the", "a", "there", "answer", "any",
+        "by", "bye", "their", "abc"]
+res = ["Not present in trie", "Present in trie"]
+
+t = Trie()
+print("Keys to insert: \n", keys)
+
+# Construct Trie
+for words in keys:
+    t.insert(words)
+
+# Search for different keys
+print("the --- " + res[1] if t.search("the") else "the --- " + res[0])
+print("these --- " + res[1] if t.search("these") else "these --- " + res[0])
+print("abc --- " + res[1] if t.search("abc") else "abc --- " + res[0])
+
+# Delete abc
+t.delete("abc")
+print("Deleted key \"abc\" \n")
+
+print("abc --- " + res[1] if t.search("abc") else "abc --- " + res[0])
+```
+
 #### Full Trie Implementation
+
+```python
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()  # Root node
+
+    # Function to get the index of character 't'
+    def get_index(self, t):
+        return ord(t) - ord('a')
+
+    # Function to insert a key in the Trie
+    def insert(self, key):
+        if key is None:
+            return False  # None key
+
+        key = key.lower()  # Keys are stored in lowercase
+        current = self.root
+
+        # Iterate over each letter in the key
+        # If the letter exists, go down a level
+        # Else simply create a TrieNode and go down a level
+        for letter in key:
+            index = self.get_index(letter)
+
+            if current.children[index] is None:
+                current.children[index] = TrieNode(letter)
+                print(letter, "inserted")
+
+            current = current.children[index]
+
+        current.is_end_word = True
+        print("'" + key + "' inserted")
+
+    # Function to search a given key in Trie
+    def search(self, key):
+        if key is None:
+            return False  # None key
+
+        key = key.lower()
+        current = self.root
+
+        # Iterate over each letter in the key
+        # If the letter doesn't exist, return False
+        # If the letter exists, go down a level
+        # We will return true only if we reach the leafNode and
+        # have traversed the Trie based on the length of the key
+
+        for letter in key:
+            index = self.get_index(letter)
+            if current.children[index] is None:
+                return False
+            current = current.children[index]
+
+        if current is not None and current.is_end_word:
+            return True
+
+        return False
+
+    # Recursive function to delete given key
+    # key = word
+    # current = root in the beginning, a node in recursive calls
+    # length = len(key)
+    # level = 0, 1, ..., len(key) 
+    def delete_helper(self, key, current, length, level):
+        deleted_self = False
+
+        if current is None:
+            print("Key does not exist")
+            return deleted_self
+
+        # Base Case:
+        # We have reached at the node which points
+        # to the alphabet at the end of the key,
+        # i.e., when the algorithm reaches the last node of the key
+        if level == length:
+            # If there are no nodes ahead of this node in
+            # this path, then we can delete this node
+            print("Level is length, we are at the end")
+            if current.children.count(None) == len(current.children):
+                print("- Node", current.char, ": has no children, delete it")
+                current = None
+                deleted_self = True
+
+            # If there are nodes ahead of current in this path
+            # Then we cannot delete current. We simply unmark this as leaf
+            else:
+                print("- Node", current.char, ": has children, don't delete \
+                it")
+                current.is_end_word = False
+                deleted_self = False
+
+        else:
+            index = self.get_index(key[level])
+            print("Traverse to", key[level])
+            child_node = current.children[index]
+            child_deleted = self.delete_helper(
+                key, child_node, length, level + 1)
+            # print( "Returned from", key[level] , "as",  child_deleted)
+            if child_deleted:
+                # Setting children pointer to None as child is deleted
+                print("- Delete link from", current.char, "to", key[level])
+                current.children[index] = None
+                # If current is a leaf node then
+                # current is part of another key
+                # So, we cannot delete this node and it's parent path nodes
+                if current.is_end_word:
+                    print("- - Don't delete node", current.char, ": word end")
+                    deleted_self = False
+
+                # If child_node is deleted and current has more children
+                # then current must be part of another key
+                # So, we cannot delete current Node
+                elif current.children.count(None) != len(current.children):
+                    print("- - Don't delete node", current.char, ": has \
+                    children")
+                    deleted_self = False
+
+                # Else we can delete current
+                else:
+                    print("- - Delete node", current.char, ": has no children")
+                    current = None
+                    deleted_self = True
+
+            else:
+                deleted_self = False
+
+        return deleted_self
+
+    # Function to delete given key from Trie
+    # key = word
+    # Trivial cases handled and recursive function delete_helper called
+    def delete(self, key):
+        if self.root is None or key is None:
+            print("None key or empty trie error")
+            return
+        print("\nDeleting:", key)
+        self.delete_helper(key, self.root, len(key), 0)
+
+
+# Input keys (use only 'a' through 'z')
+keys = ["the", "a", "there", "answer", "any",
+        "by", "bye", "their", "abc"]
+res = ["Not present in trie", "Present in trie"]
+
+t = Trie()
+print("Keys to insert: \n", keys)
+
+# Construct Trie
+for words in keys:
+    t.insert(words)
+
+# Search for different keys
+print("the --- " + res[1] if t.search("the") else "the --- " + res[0])
+print("these --- " + res[1] if t.search("these") else "these --- " + res[0])
+print("abc --- " + res[1] if t.search("abc") else "abc --- " + res[0])
+
+# Delete abc
+t.delete("abc")
+print("Deleted key \"abc\" \n")
+
+print("abc --- " + res[1] if t.search("abc") else "abc --- " + res[0])
+```
 
 #### Examples, Exercises
 
