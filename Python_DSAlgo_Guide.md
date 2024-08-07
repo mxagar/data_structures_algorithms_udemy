@@ -1983,13 +1983,13 @@ class Trie:
   - Solution: The number of words in a tree amounts to the number of leafs in it, i.e., we need to count the number of nodes with `end_of_word = True`. We can create a recursive function which increases counter if a leaf node is found and calls itself if node children exist.
 - [Trees/Tries/Tries - Problems - SOLUTIONS/02_Trie_All_Words.ipynb](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/02_Trie_All_Words.ipynb):
   - Problem: Given a Trie with several words in it, print all the words.
-  - Solution: Depth-First Search is implemented recursively and using some helper functions (e.g., get maximum tree depth).
+  - Solution: Depth-First Search is implemented recursively and using some helper functions (e.g., get maximum tree depth). The returned list is lexicographically ordered! The complexity is `O(n)`.
 - [Trees/Tries/Tries - Problems - SOLUTIONS/03_Trie_List_Sort.ipynb](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/03_Trie_List_Sort.ipynb):
-  - Problem:
-  - Solution:
+  - Problem: Given a list of strings as input, implement the `sort_list()` function, which sorts the elements of the list in lexicographical order
+  - Solution: We construct a Trie with the words in the list and then we extract the words from it using a depth-first search, implemented recursive calls with a `get_words()` function. The complexity is `O(n)`.
 - [Trees/Tries/Tries - Problems - SOLUTIONS/04_Trie_Word_Formation.ipynb](./Trees/Tries/Tries%20-%20Problems%20-%20SOLUTIONS/04_Trie_Word_Formation.ipynb):
-  - Problem:
-  - Solution:
+  - Problem: Given a dictionary, find whether a given word can be formed by combining two words from the dictionary.
+  - Solution: A trie is formed with all the words in the dictionary. Then, given a query word, we check its characters one by one to see if there exists a valid path in the trie, even though the word is not inserted (i.e., the flag `end_of_word` is not set).
 
 ## 7. Searching and Sorting
 
