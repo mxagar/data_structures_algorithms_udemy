@@ -68,23 +68,27 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
       - [Deletion in a Trie](#deletion-in-a-trie)
       - [Full Trie Implementation](#full-trie-implementation)
       - [Examples, Exercises](#examples-exercises)
-  - [7. Searching and Sorting](#7-searching-and-sorting)
-  - [8. Graph Algorithms](#8-graph-algorithms)
-  - [9. Riddles and Brain Teasers](#9-riddles-and-brain-teasers)
+  - [7. Searching](#7-searching)
+    - [Sequential Search](#sequential-search)
+    - [Binary Search](#binary-search)
+    - [Hash Tables](#hash-tables)
+  - [8. Sorting](#8-sorting)
+  - [9. Graph Algorithms](#9-graph-algorithms)
+  - [10. Riddles and Brain Teasers](#10-riddles-and-brain-teasers)
     - [Examples, Exercises](#examples-exercises-1)
-  - [10. Extra: Subsets - Combinations, Permutations and Co.](#10-extra-subsets---combinations-permutations-and-co)
+  - [11. Extra: Subsets - Combinations, Permutations and Co.](#11-extra-subsets---combinations-permutations-and-co)
     - [Permutations](#permutations)
     - [Combinations (without Replacement)](#combinations-without-replacement)
     - [Combinations with Replacement](#combinations-with-replacement)
     - [Python Implementations](#python-implementations)
     - [Example: Largest Palindromic Number](#example-largest-palindromic-number)
-  - [11. Extra: Python Tips \& Tricks](#11-extra-python-tips--tricks)
+  - [12. Extra: Python Tips \& Tricks](#12-extra-python-tips--tricks)
     - [Interesting Articles, Links](#interesting-articles-links)
     - [Python Tools](#python-tools)
     - [Testing](#testing)
     - [Tricks](#tricks)
-  - [12. Extra: Writing Efficient Python Code](#12-extra-writing-efficient-python-code)
-  - [13. Design Patterns](#13-design-patterns)
+  - [13. Extra: Writing Efficient Python Code](#13-extra-writing-efficient-python-code)
+  - [14. Design Patterns](#14-design-patterns)
 
 ## 1. Algorithm Analysis and Big O
 
@@ -1991,19 +1995,151 @@ class Trie:
   - Problem: Given a dictionary, find whether a given word can be formed by combining two words from the dictionary.
   - Solution: A trie is formed with all the words in the dictionary. Then, given a query word, we check its characters one by one to see if there exists a valid path in the trie, even though the word is not inserted (i.e., the flag `end_of_word` is not set).
 
-## 7. Searching and Sorting
+## 7. Searching
+
+Three most important types of search and associated data structures:
+
+- Sequential search
+- Binary search
+- Hash tables
+
+### Sequential Search
+
+We sequentially go in a collection to check whether a queried item is in it:
+
+- If the array/collection is unordered, we need to visit all items.
+- If the array/collection is ordered, we must not visit all items! We visit until we find a match or the visit is larger than the queried item. Additionally, we can define other strategies, like binary search.
+
+For a simple linear/sequential search, worst case is `O(n)`, average `O(n/2)`.
+
+Notebook: [`Sorting and Searching/Sequential Search.ipynb`](./Sorting%20and%20Searching/Sequential%20Search.ipynb).
+
+```python
+# Ordered arrays
+def sequential_search(arr, ele):
+    # Start at position 0
+    pos = 0
+    # Target becomes true if ele is in the list
+    found = False
+    
+    while pos < len(arr) and not found:
+        if arr[pos] == ele:
+            found = True
+        else:
+            pos += 1
+    
+    return found
+
+def ordered_sequential_search(arr, ele):
+    # Start at position 0
+    pos = 0
+    # Target becomes true if ele is in the list
+    found = False
+    # Stop marker
+    stopped = False
+    
+    while pos < len(arr) and not found and not stopped:
+        if arr[pos] == ele:
+            found = True
+        else:
+            if arr[pos] > ele:
+                stopped = True
+            else:
+                pos += 1
+    
+    return found
+```
+
+### Binary Search
+
+Binary search can be applied to a collection which is ordered.
+
+Let's say we have an ordered sequence 
+
+`S = {s_0, s_1, ..., s_n}, s_(i) <= s_(i+1)`
+
+and we want to see if the queried item `q` is in it:
+
+1. We start examining the middle of `S`.
+2. If that item is `q`, we are done.
+3. If that item is larger than `q`, we take the left half of `S`, otherwise the right half.
+4. In the half we have picked, we again start examining the middle, so we have recursively returned to step 1.
+
+This is a typical *divide and conquer* approach.
+
+The complexity of the algorithm turns out to be `O(log n)`.
+
+We ca implement binary search iteratively or recursively.
+
+![Binary Search](./assets/binary_search.png)
+
+Notebook: [`Sorting and Searching/Implementation of Binary Search.ipynb`](./Sorting%20and%20Searching/Implementation%20of%20Binary%20Search.ipynb)
+
+```python
+# Iterative Binary Search
+def binary_search(arr, ele):
+    # First and last index values
+    first = 0
+    last = len(arr) - 1
+    found = False
+    
+    while first <= last and not found:    
+        mid = (first+last)//2
+        # Match found
+        if arr[mid] == ele:
+            found = True
+        # Set new midpoints up or down depending on comparison
+        else:
+            # Set down/left
+            if ele < arr[mid]:
+                last = mid - 1
+            # Set up/right
+            else:
+                first = mid + 1
+                
+    return found
+
+# Recursive Binary Search
+def binary_search_recursive(arr, ele):
+    # Base Case!
+    if len(arr) == 0:
+        return False
+    # Recursive Case
+    else:
+        mid = len(arr)//2
+        # If match found
+        if arr[mid] == ele:
+            return True
+        else:
+            # Call again on second half
+            if ele < arr[mid]:
+                return binary_search_recursive(arr[:mid],ele)
+            # Or call on first half
+            else:
+                return binary_search_recursive(arr[mid+1:],ele)
+```
+
+### Hash Tables
+
+
+
+Notebook: [`Sorting and Searching/Implementation of a Hash Table.ipynb`](./Sorting%20and%20Searching/Implementation%20of%20a%20Hash%20Table.ipynb).
+
+
+
+## 8. Sorting
 
 :construction:
 
 TBD.
 
-## 8. Graph Algorithms
+## 9. Graph Algorithms
 
 :construction:
 
 TBD.
 
-## 9. Riddles and Brain Teasers
+## 10. Riddles and Brain Teasers
 
 Types of riddles:
 
@@ -2043,7 +2179,7 @@ Tips:
   - Problem: Three ropes of different material and burning rate take exactly 60 minutes to burn, but each burns inconsistently. Measure 45 minutes.
   - Solution: We can light the two ends of a rope, and one of another. When the first finishes, we light the second end of the second rope which is burning.
 
-## 10. Extra: Subsets - Combinations, Permutations and Co.
+## 11. Extra: Subsets - Combinations, Permutations and Co.
 
 Sources:
 
@@ -2315,7 +2451,7 @@ test_solution()
 4. Create the Full Palindrome: Mirror the first half to create the second half of the palindrome, inserting the middle digit if necessary.
 
 
-## 11. Extra: Python Tips & Tricks
+## 12. Extra: Python Tips & Tricks
 
 ### Interesting Articles, Links
 
@@ -2430,7 +2566,7 @@ text = 'abc'
 text[5:] # '', NO ERROR!
 
 # Check if element in list:
-# -> first transform into set, because it's a hash table => O(1) serach!
+# -> first transform into set, because it's a hash table => O(1) search!
 L = ["San Sebastian", "Bilbao", "Gasteiz", "Eibar", "Irun"]
 S = set(l)
 K = "Madrid"
@@ -2597,7 +2733,7 @@ source_code = inspect.getsource(MyClass)
 print(source_code)
 ```
 
-## 12. Extra: Writing Efficient Python Code
+## 13. Extra: Writing Efficient Python Code
 
 DataCamp course [Writing Efficient Python Code](https://app.datacamp.com/learn/courses/writing-efficient-python-code):
 
@@ -2619,6 +2755,39 @@ DataCamp course [Writing Efficient Python Code](https://app.datacamp.com/learn/c
 
 See [`Efficient_Python/`](./Efficient_Python/).
 
-## 13. Design Patterns
+## 14. Design Patterns
 
-See [mxagar/design_patterns_notes](https://github.com/mxagar/design_patterns_notes).
+See [mxagar/design_patterns_notes](https://github.com/mxagar/design_patterns_notes):
+
+- Obeject-Oriented Programming principles and tools in Python
+- SOLID Design Principles
+  - Single Responsibility
+  - Open-Closed
+  - Liskov Substitution
+  - Interface Segregation
+  - Dependency Inversion
+- Creational Patterns
+  - Builder
+  - Factories: Abstract, Factory Method and Class
+  - Prototype (Factory)
+  - Singleton: Allocator, Decorator, Metaclass, Monostate
+- Structural Patterns
+  - Adapter
+  - Bridge
+  - Composite
+  - Decorator
+  - Facade
+  - Flyweight
+  - Proxy
+- Behavioral Patterns
+  - Chain of Responsibility
+  - Command
+  - Interpreter
+  - Iterator
+  - Mediator
+  - Memento
+  - Observer
+  - State
+  - Strategy
+  - Template Method
+  - Visitor
