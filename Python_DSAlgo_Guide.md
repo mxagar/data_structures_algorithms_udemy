@@ -2121,11 +2121,161 @@ def binary_search_recursive(arr, ele):
 
 ### Hash Tables
 
+A hash table is basically an array and we apply a hash function to a key in order to get the index in the array to find the value of the key located in that array cell:
 
+- the **key** is also called an **item**,
+- the array cell is also called **slot**, and it stores both the **key** and the associated **value**,
+- the array is initialized with `Nones`,
+- the **hash function** performs the mapping from the key to the slot **index**, where the key is verified and the value accessed.
 
-Notebook: [`Sorting and Searching/Implementation of a Hash Table.ipynb`](./Sorting%20and%20Searching/Implementation%20of%20a%20Hash%20Table.ipynb).
+Storing both the keys and the values is necessary to deal with collisions (see below), i.e., situations in which the hash function yields the same index for different keys.
 
+Example:
 
+- Set of integers: `54, 26, 93, 17, 77, 31`.
+- Hash table of `table_size = m = 11` slots.
+- Possible hash functions:
+  -  **Remainder hash function**: `h(key) = key % table_size`. This function assigns a slot number to every key; but, as already mentioned, there might be **collisions**, addressed below (e.g., `44 % 11 = 0, 77 % 11 = 0`).
+  - **Folding hash function**: split the item into equal-sized parts (except maybe last part), sum them and apply modulo of the hash table size; e.g., with a phone number `436-555-5601 -> 43 + 65 + 55 + 56 + 01 = 210 -> 210 % 11 = 1`.
+  - **Mid-square method**: square the item, extract some middle part and apply modulo of the hash table size; e.g.: `44 -> 44^2 = 1936 -> extract 2 middle digits: 93 -> 93 % 11 = 5`.
+
+![Hash table](./assets/hash_table.png)
+
+We can also create hash functions for non-integer types, too, as long as they can be represented with some [**ordinal values**](https://en.wikipedia.org/wiki/Ordinal_data). For instance, with strings:
+
+    "cat" -> c, a, t -> ord("c"), ord("a"), ord("t") -> 99, 97, 116 -> (99 + 97 + 116) % table_size
+
+**Great advantage of hash functions: insertion, deletion and search are `O(1)`!**
+
+The **load factor** of a hash table is the ratio of occupancy: `lambda = num_items / table_size`.
+
+A hash function that maps each key or item into a unique slot is a **perfect hash function**. Our goals is:
+
+- To have as few collisions as possible.
+- To evenly distribute the items in the hash table.
+- To find a hash function which is easy to compute and achieves the previous 2 goals.
+
+**Collision resolution** is fundamental, i.e., when we has a key and the resulting slot is already taken, we need to find a new slot. One approach is **Open addressing**, which consists in finding the next free slot following a strategy:
+
+- **Linear probing**: move sequentially from occupied slot onwards to find the next free slot. If a collision occurs at index `i`, the algorithm checks index `(i + 1) % table_size`. However, this leads to *primary clustering*, i.e., a group of contiguous occupied slots is formed, leading to an increased likelihood of collisions and longer search times
+- **Quadratic probing**: Quadratic probing attempts to address the primary clustering problem in linear probing by using a quadratic function to calculate the interval between probes. If a collision occurs at index `i`, the algorithm checks index `(i + 1^2) % table_size`, then `(i + 2^2) % table_size`, and so on.
+- **Double hashing**: When a collision occurs, double hashing uses a second hash function to determine the interval between probes, rather than using a fixed interval (as in linear probing) or a quadratic interval (as in quadratic probing). Double hashing is often preferred in scenarios where a good distribution of entries is critical. Example:
+  - First index: `i1 = h1(key) = key % table_size`.
+  - Second hash: `h2(key) = 1 + (key % (table_size - 1))`
+  - Second index: `i2 = i1 + h2(key) = i1 + (1 + (key % (table_size - 1)))`
+
+Open addressing deals also with several collisions; if we store the key in a slot, we iteratively probe using the open addressing strategy the next slot until either a free one is found or the queried key is found.
+
+Obviously, open addressing methods break the `O(1)` performance, because we start traversing the slots in the hash table looking for an empty slot or checking the queried key.
+
+There are alternative methods to the **open addressing** approaches, e.g.:
+
+- **Rehashing**: increasing the size of the hash table and recalculating the hash indices for all the existing keys. Very expensive.
+- **Chaining**: we allow each slot to point to a collection of items (linked lists). If many items are in a collection, we can experience a performance degradation, as with open addressing.
+
+![Hash table chaining](./assets/hash_table_chaining.png)
+
+Note: keep in mind that a slot index in the hash table stores not only the values, but the key-value pairs in order to be able to deal with collisions.
+
+Notebook: [`Sorting and Searching/Implementation of a Hash Table.ipynb`](./Sorting%20and%20Searching/Implementation%20of%20a%20Hash%20Table.ipynb). A hash table is implemented; this is rarely done in Python unless in coding challenges, because:
+
+- Python dictionaries are effectively hash tables!
+- We can make any data structure (`class`) hashable by defining (overriding) the methods `__hash__` and `__eq__`.
+
+```python
+class HashTable():
+    
+    def __init__(self, size=100):        
+        self.size = size # table_size
+        self.slots = [None] * self.size # keys
+        self.data = [None] * self.size # values
+        
+    def put(self, key, data):
+        """Add a new key-value pair to the hash table.
+        If the key already exists,
+        replace the old value with the new one.
+        In this case, only integer keys are used."""
+
+        # Get the hash value
+        hash_value = self.hash_function(key, len(self.slots))
+
+        # If slot is empty, add key-value pair
+        # Note: this is implemented with a Python list
+        # (which is not really a linked list, but a dynamic array with O(1) access);
+        # as an alternative we can use a Numpy array
+        # (also contiguous memory cells, but optimized for basic types)
+        if self.slots[hash_value] == None:
+            self.slots[hash_value] = key
+            self.data[hash_value] = data
+        
+        else:
+            # If key already exists, replace old value
+            if self.slots[hash_value] == key:
+                self.data[hash_value] = data  
+            
+            # Otherwise, find the next available slot
+            else:
+                next_slot = self.linear_probe(hash_value, len(self.slots))
+                
+                # Get to the next slot
+                while self.slots[next_slot] is not None and self.slots[next_slot] != key:
+                    next_slot = self.linear_probe(next_slot, len(self.slots))
+                
+                # Set new key, if NONE
+                if self.slots[next_slot] == None:
+                    self.slots[next_slot]=key
+                    self.data[next_slot]=data
+                # Otherwise replace old value
+                else:
+                    self.data[next_slot] = data 
+
+    def hash_function(self, key, size):
+        # Remainder Method
+        return key % size
+
+    def linear_probe(self, old_hash, size):
+        # For finding next possible positions
+        return (old_hash+1) % size
+    
+    def get(self, key):
+        """Getting item/value given a key."""
+
+        # Set up variables for our search
+        start_slot = self.hash_function(key, len(self.slots))
+        data = None
+        stop = False
+        found = False
+        position = start_slot
+        
+        # Until we discern that it's not empty or found (and haven't stopped yet)
+        while self.slots[position] is not None and not found and not stop:            
+            if self.slots[position] == key:
+                found = True
+                data = self.data[position]
+            else:
+                position=self.linear_probe(position,len(self.slots))
+                if position == start_slot:
+                    stop = True
+
+        return data
+
+    # Special Methods for use with Python indexing
+    def __getitem__(self, key):
+        return self.get(key)
+
+    def __setitem__(self, key, data):
+        self.put(key, data)
+
+##
+h = HashTable(5)
+h[1] = 'one' # __setitem__ -> put()
+h[2] = 'two'
+h[3] = 'three'
+print(h[1]) # one, __getitem__ -> get()
+h[1] = 'new_one'
+print(h[1]) # new_one
+print(h[4]) # None
+```
 
 ## 8. Sorting
 
