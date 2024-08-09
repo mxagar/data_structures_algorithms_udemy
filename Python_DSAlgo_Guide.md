@@ -73,6 +73,12 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
     - [Binary Search](#binary-search)
     - [Hash Tables](#hash-tables)
   - [8. Sorting](#8-sorting)
+    - [Bubble Sort](#bubble-sort)
+    - [Selection Sort](#selection-sort)
+    - [Insertion Sort](#insertion-sort)
+    - [Shell Sort](#shell-sort)
+    - [Merge Sort](#merge-sort)
+    - [Quick Sort](#quick-sort)
   - [9. Graph Algorithms](#9-graph-algorithms)
   - [10. Riddles and Brain Teasers](#10-riddles-and-brain-teasers)
     - [Examples, Exercises](#examples-exercises-1)
@@ -2155,7 +2161,7 @@ A hash function that maps each key or item into a unique slot is a **perfect has
 - To evenly distribute the items in the hash table.
 - To find a hash function which is easy to compute and achieves the previous 2 goals.
 
-**Collision resolution** is fundamental, i.e., when we has a key and the resulting slot is already taken, we need to find a new slot. One approach is **Open addressing**, which consists in finding the next free slot following a strategy:
+**Collision resolution** is fundamental, i.e., when we have a new key and the resulting slot is already taken, we need to find a new slot. One approach is **Open addressing**, which consists in finding the next free slot following a strategy:
 
 - **Linear probing**: move sequentially from occupied slot onwards to find the next free slot. If a collision occurs at index `i`, the algorithm checks index `(i + 1) % table_size`. However, this leads to *primary clustering*, i.e., a group of contiguous occupied slots is formed, leading to an increased likelihood of collisions and longer search times
 - **Quadratic probing**: Quadratic probing attempts to address the primary clustering problem in linear probing by using a quadratic function to calculate the interval between probes. If a collision occurs at index `i`, the algorithm checks index `(i + 1^2) % table_size`, then `(i + 2^2) % table_size`, and so on.
@@ -2282,6 +2288,18 @@ print(h[4]) # None
 :construction:
 
 TBD.
+
+### Bubble Sort
+
+### Selection Sort
+
+### Insertion Sort
+
+### Shell Sort
+
+### Merge Sort
+
+### Quick Sort
 
 ## 9. Graph Algorithms
 
