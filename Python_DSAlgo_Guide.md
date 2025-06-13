@@ -73,12 +73,6 @@ Another related repository of mine is [python_interviews](https://github.com/mxa
     - [Binary Search](#binary-search)
     - [Hash Tables](#hash-tables)
   - [8. Sorting](#8-sorting)
-    - [Bubble Sort](#bubble-sort)
-    - [Selection Sort](#selection-sort)
-    - [Insertion Sort](#insertion-sort)
-    - [Shell Sort](#shell-sort)
-    - [Merge Sort](#merge-sort)
-    - [Quick Sort](#quick-sort)
   - [9. Graph Algorithms](#9-graph-algorithms)
   - [10. Riddles and Brain Teasers](#10-riddles-and-brain-teasers)
     - [Examples, Exercises](#examples-exercises-1)
@@ -2288,18 +2282,6 @@ print(h[4]) # None
 :construction:
 
 TBD.
-
-### Bubble Sort
-
-### Selection Sort
-
-### Insertion Sort
-
-### Shell Sort
-
-### Merge Sort
-
-### Quick Sort
 
 ## 9. Graph Algorithms
 
